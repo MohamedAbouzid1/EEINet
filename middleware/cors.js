@@ -5,12 +5,12 @@ const corsOptions = {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
 
-        // In production, replace with frontend domains
+        // replace with frontend production domains
         const allowedOrigins = [
             'http://localhost:3000',
             'http://localhost:3001',
             'http://localhost:8080',
-            // Add your production domains here
+            // Add production domains here
         ];
 
         if (allowedOrigins.indexOf(origin) !== -1) {

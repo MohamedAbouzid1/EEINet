@@ -31,7 +31,7 @@ const validateMethod = [
   query('method').optional().isIn(['contact_based', 'PISA', 'EPPIC', 'predicted_contact', 'predicted_PISA', 'predicted_EPPIC']).withMessage('Invalid method')
 ];
 
-// ===== EXON ROUTES =====
+// EXON ROUTES
 router.get('/exon/:exon_id',
   validateExonId,
   exonController.getExon
@@ -44,7 +44,7 @@ router.get('/exon/:exon_id/interactions',
   exonController.getExonInteractions
 );
 
-// ===== PROTEIN ROUTES =====
+// PROTEIN ROUTES
 router.get('/protein/:protein_id',
   validateProteinId,
   proteinController.getProtein
@@ -63,7 +63,7 @@ router.get('/protein/:protein_id/interactions',
   proteinController.getProteinInteractions
 );
 
-// ===== INTERACTION ROUTES =====
+// INTERACTION ROUTES
 router.get('/interactions/experimental',
   validatePagination,
   validateMethod,
@@ -83,12 +83,12 @@ router.get('/interactions/:interaction_id',
   interactionController.getInteraction
 );
 
-// ===== STATS ROUTES =====
+// STATS ROUTES
 router.get('/stats/summary', statsController.getSummary);
 router.get('/stats/distributions', statsController.getDistributions);
 router.get('/stats/confidence', statsController.getConfidenceStats);
 
-// ===== EXPORT ROUTES =====
+// EXPORT ROUTES
 router.get('/export/interactions',
   validatePagination,
   validateMethod,
@@ -96,7 +96,7 @@ router.get('/export/interactions',
   exportController.exportInteractions
 );
 
-// ===== SEARCH ROUTES =====
+// SEARCH ROUTES
 router.get('/search',
   query('q').notEmpty().withMessage('Search query is required'),
   query('type').optional().isIn(['gene', 'protein', 'exon', 'any']).withMessage('Invalid search type'),
