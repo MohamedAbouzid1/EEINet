@@ -1,8 +1,8 @@
 const db = require('../db/connect');
 
 class Protein {
-    static async findById(proteinId) {
-        const query = `
+  static async findById(proteinId) {
+    const query = `
       SELECT 
         p.protein_id,
         p.uniprot_id,
@@ -16,15 +16,15 @@ class Protein {
       FROM proteins p
       LEFT JOIN genes g ON p.gene_id = g.gene_id
       LEFT JOIN organisms o ON g.organism_id = o.organism_id
-      WHERE p.uniprot_id = $1 OR p.protein_id = $1
+      WHERE p.uniprot_id = $1 OR p.protein_id = $1::integer
     `;
 
-        const result = await db.query(query, [proteinId]);
-        return result.rows[0] || null;
-    }
+    const result = await db.query(query, [proteinId]);
+    return result.rows[0] || null;
+  }
 
-    static async getExons(proteinId, limit = 100, offset = 0) {
-        const query = `
+  static async getExons(proteinId, limit = 100, offset = 0) {
+    const query = `
       SELECT DISTINCT
         e.exon_id,
         e.ensembl_exon_id,
@@ -38,26 +38,26 @@ class Protein {
       FROM proteins p
       JOIN eei_interactions ei ON (ei.protein1_id = p.protein_id OR ei.protein2_id = p.protein_id)
       JOIN exons e ON (ei.exon1_id = e.exon_id OR ei.exon2_id = e.exon_id)
-      WHERE p.uniprot_id = $1 OR p.protein_id = $1
+      WHERE p.uniprot_id = $1 OR p.protein_id = $1::integer
       GROUP BY e.exon_id, e.ensembl_exon_id, e.exon_number, e.chromosome, e.strand, e.exon_start, e.exon_end, e.exon_length
       ORDER BY e.exon_number NULLS LAST, e.exon_start
       LIMIT $2 OFFSET $3
     `;
 
-        const result = await db.query(query, [proteinId, limit, offset]);
-        return result.rows;
+    const result = await db.query(query, [proteinId, limit, offset]);
+    return result.rows;
+  }
+
+  static async getInteractions(proteinId, limit = 50, offset = 0, method = null) {
+    let methodFilter = '';
+    let params = [proteinId, proteinId, limit, offset];
+
+    if (method) {
+      methodFilter = 'AND em.method_name = $5';
+      params.push(method);
     }
 
-    static async getInteractions(proteinId, limit = 50, offset = 0, method = null) {
-        let methodFilter = '';
-        let params = [proteinId, proteinId, limit, offset];
-
-        if (method) {
-            methodFilter = 'AND em.method_name = $5';
-            params.push(method);
-        }
-
-        const query = `
+    const query = `
       SELECT 
         ei.eei_id,
         e1.ensembl_exon_id as exon1,
@@ -78,8 +78,8 @@ class Protein {
       JOIN proteins p2 ON ei.protein2_id = p2.protein_id
       JOIN eei_methods em ON ei.method_id = em.method_id
       LEFT JOIN eei_orthology_mapping eom ON ei.eei_id = eom.eei_id
-      WHERE (p1.uniprot_id = $1 OR p1.protein_id = $1)
-         OR (p2.uniprot_id = $2 OR p2.protein_id = $2)
+      WHERE (p1.uniprot_id = $1 OR p1.protein_id = $1::integer)
+         OR (p2.uniprot_id = $2 OR p2.protein_id = $2::integer)
       ${methodFilter}
       ORDER BY 
         CASE WHEN eom.confidence IS NOT NULL THEN eom.confidence ELSE 1.0 END DESC,
@@ -87,9 +87,9 @@ class Protein {
       LIMIT $3 OFFSET $4
     `;
 
-        const result = await db.query(query, params);
-        return result.rows;
-    }
+    const result = await db.query(query, params);
+    return result.rows;
+  }
 }
 
 module.exports = Protein;
