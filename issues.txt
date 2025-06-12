@@ -1,0 +1,5 @@
+issues to fix
+
+1. query limits should be increased or removed. check in all apis
+2. fix the gene query issue in the database
+3. pdb_id serch function in th query
