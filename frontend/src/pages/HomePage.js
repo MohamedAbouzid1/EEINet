@@ -44,9 +44,9 @@ const HomePage = () => {
 
     const features = [
         {
-            icon: <SearchIcon />, // Changed from <Search /> to <SearchIcon />
+            icon: <SearchIcon />,
             title: 'Advanced Search',
-            description: 'Search exons, proteins, and genes across experimental and predicted interactions',
+            description: 'Search exon, protein, or gene across species',
             link: '/search',
             color: '#1976d2',
         },
@@ -76,25 +76,25 @@ const HomePage = () => {
     const statsCards = [
         {
             title: 'Total Interactions',
-            value: stats?.data?.total_eei_interactions || 0,
+            value: stats?.data?.total_eei_interactions || 72657,
             icon: <TrendingUp />,
             color: '#1976d2',
         },
         {
             title: 'Experimental EEIs',
-            value: stats?.data?.experimental_eeis || 0,
+            value: stats?.data?.experimental_eeis || 72352,
             icon: <Science />,
             color: '#388e3c',
         },
         {
             title: 'Unique Exons',
-            value: stats?.data?.unique_exons || 0,
+            value: stats?.data?.unique_exons || 12769,
             icon: <AccountTree />,
             color: '#f57c0',
         },
         {
             title: 'Unique Proteins',
-            value: stats?.data?.unique_proteins || 0,
+            value: stats?.data?.unique_proteins || 3166,
             icon: <Science />,
             color: '#7b1fa2',
         },
@@ -122,7 +122,21 @@ const HomePage = () => {
                                 WebkitTextFillColor: 'transparent',
                             }}
                         >
-                            EEI Network Database
+                            EEINet
+                        </Typography>
+                        <Typography
+                            variant="h3"
+                            component="h1"
+                            gutterBottom
+                            sx={{
+                                fontWeight: 700,
+                                background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+                                backgroundClip: 'text',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                            }}
+                        >
+                            The Exon-Exon Interaction Network Database
                         </Typography>
                         <Typography
                             variant="h5"
@@ -130,7 +144,7 @@ const HomePage = () => {
                             paragraph
                             sx={{ maxWidth: 600, mx: 'auto', mb: 4 }}
                         >
-                            Explore exon-exon interactions across species with experimental and predicted data
+                            Explore human exon-exon interactions across species with experimental and predicted data
                         </Typography>
 
                         {/* Search Bar */}
@@ -139,7 +153,7 @@ const HomePage = () => {
                             onSubmit={handleSearch}
                             sx={{
                                 p: 2,
-                                maxWidth: 600,
+                                maxWidth: 1000,
                                 mx: 'auto',
                                 mb: 4,
                                 display: 'flex',
@@ -196,7 +210,7 @@ const HomePage = () => {
                     <Typography variant="h4" component="h2" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
                         Database Overview
                     </Typography>
-                    <Grid container spacing={3} sx={{ mb: 6 }}>
+                    <Grid container spacing={3} sx={{ mb: 6, justifyContent: 'center' }}>
                         {statsCards.map((stat, index) => (
                             <Grid item xs={12} sm={6} md={3} key={stat.title}>
                                 <motion.div
@@ -243,7 +257,7 @@ const HomePage = () => {
                     <Typography variant="h4" component="h2" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
                         Explore the Database
                     </Typography>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
                         {features.map((feature, index) => (
                             <Grid item xs={12} md={6} key={feature.title}>
                                 <motion.div

@@ -6,3 +6,5 @@ FROM exons
 LIMIT 10;
 SELECT *
 FROM web_search_eei('ENSE00001126122', 'any', NULL, NULL, 10, 0);
+SELECT *
+FROM get_eei_statistics();

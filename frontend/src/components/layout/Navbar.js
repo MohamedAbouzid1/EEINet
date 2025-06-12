@@ -22,6 +22,8 @@ import {
     AccountTree,
     FileDownload,
     Science,
+    Info,
+    Help,
 } from '@mui/icons-material';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -37,6 +39,8 @@ const Navbar = () => {
         { text: 'Statistics', path: '/statistics', icon: <BarChart /> },
         { text: 'Network', path: '/network', icon: <AccountTree /> },
         { text: 'Export', path: '/export', icon: <FileDownload /> },
+        { text: 'About', path: '/about', icon: <Info /> },
+        { text: 'Help', path: '/help', icon: <Help /> },
     ];
 
     const handleDrawerToggle = () => {
@@ -98,7 +102,7 @@ const Navbar = () => {
                                 fontWeight: 600,
                             }}
                         >
-                            EEI Network Database
+                            EEINet
                         </Typography>
                     </Box>
 
