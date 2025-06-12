@@ -44,7 +44,7 @@ const HomePage = () => {
 
     const features = [
         {
-            icon: <Search />,
+            icon: <SearchIcon />, // Changed from <Search /> to <SearchIcon />
             title: 'Advanced Search',
             description: 'Search exons, proteins, and genes across experimental and predicted interactions',
             link: '/search',
@@ -90,7 +90,7 @@ const HomePage = () => {
             title: 'Unique Exons',
             value: stats?.data?.unique_exons || 0,
             icon: <AccountTree />,
-            color: '#f57c00',
+            color: '#f57c0',
         },
         {
             title: 'Unique Proteins',

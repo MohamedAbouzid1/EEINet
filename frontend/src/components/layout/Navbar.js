@@ -74,15 +74,17 @@ const Navbar = () => {
         <>
             <AppBar position="fixed" elevation={2}>
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { md: 'none' } }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    {isMobile && (
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            edge="start"
+                            onClick={handleDrawerToggle}
+                            sx={{ mr: 2 }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    )}
 
                     <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
                         <Science sx={{ mr: 1 }} />

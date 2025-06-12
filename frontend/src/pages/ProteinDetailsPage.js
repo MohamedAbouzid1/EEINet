@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
     Container,
@@ -8,7 +7,6 @@ import {
     CardContent,
     Grid,
     Chip,
-    Divider,
     Button,
     Table,
     TableBody,
@@ -16,7 +14,6 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
     CircularProgress,
     Alert,
     Tabs,
@@ -137,44 +134,6 @@ const ProteinDetailsPage = () => {
                                             </Typography>
                                         </Box>
                                     </Box>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <Card>
-                                <CardContent>
-                                    <Typography variant="h6" gutterBottom>
-                                        Protein Properties
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Typography variant="body2" color="text.secondary">
-                                                Sequence Length:
-                                            </Typography>
-                                            <Typography variant="body2">
-                                                {protein?.sequence_length?.toLocaleString() || 'N/A'} aa
-                                            </Typography>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Typography variant="body2" color="text.secondary">
-                                                Molecular Weight:
-                                            </Typography>
-                                            <Typography variant="body2">
-                                                {protein?.molecular_weight ? `${protein.molecular_weight} kDa` : 'N/A'}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                    {protein?.description && (
-                                        <Box sx={{ mt: 2 }}>
-                                            <Typography variant="body2" color="text.secondary" gutterBottom>
-                                                Description:
-                                            </Typography>
-                                            <Typography variant="body2">
-                                                {protein.description}
-                                            </Typography>
-                                        </Box>
-                                    )}
                                 </CardContent>
                             </Card>
                         </Grid>

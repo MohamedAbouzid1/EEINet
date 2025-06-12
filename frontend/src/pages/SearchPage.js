@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     Container,
     Typography,
@@ -22,7 +22,6 @@ import {
 } from '@mui/material';
 import {
     Search as SearchIcon,
-    FilterList,
     Clear,
 } from '@mui/icons-material';
 import { useQuery } from '@tanstack/react-query';
@@ -52,25 +51,28 @@ const SearchPage = () => {
         enabled: !!query,
     });
 
-    // Suggestions query
-    const debouncedGetSuggestions = debounce(async (inputValue) => {
-        if (inputValue.length >= 2) {
-            try {
-                const result = await searchAPI.getSuggestions(inputValue, 10);
-                setSuggestions(result.data.suggestions || []);
-            } catch (error) {
-                console.error('Failed to get suggestions:', error);
+    // Memoized debounced function to fix useEffect dependency
+    const debouncedGetSuggestions = useCallback(
+        debounce(async (inputValue) => {
+            if (inputValue.length >= 2) {
+                try {
+                    const result = await searchAPI.getSuggestions(inputValue, 10);
+                    setSuggestions(result.data.suggestions || []);
+                } catch (error) {
+                    console.error('Failed to get suggestions:', error);
+                    setSuggestions([]);
+                }
+            } else {
                 setSuggestions([]);
             }
-        } else {
-            setSuggestions([]);
-        }
-    }, 300);
+        }, 300),
+        []
+    );
 
     useEffect(() => {
         debouncedGetSuggestions(query);
         return () => debouncedGetSuggestions.cancel();
-    }, [query]);
+    }, [query, debouncedGetSuggestions]);
 
     useEffect(() => {
         const params = new URLSearchParams();
