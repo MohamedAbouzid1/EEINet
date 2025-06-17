@@ -142,7 +142,7 @@ const SearchPage = () => {
                                         <TextField
                                             {...params}
                                             fullWidth
-                                            placeholder="Enter exon ID, protein ID, or gene symbol"
+                                            placeholder="Enter exon, protein, or gene symbol"
                                             InputProps={{
                                                 ...params.InputProps,
                                                 startAdornment: (
@@ -250,7 +250,7 @@ const SearchPage = () => {
                                                         </Typography>
                                                         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
                                                             <Box>
-                                                                <Typography variant="caption" color="text.secondary">
+                                                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: 14 }}>
                                                                     Exon 1:
                                                                 </Typography>
                                                                 <Button
@@ -258,13 +258,13 @@ const SearchPage = () => {
                                                                     to={`/exon/${result.exon1}`}
                                                                     variant="outlined"
                                                                     size="small"
-                                                                    sx={{ ml: 1 }}
+                                                                    sx={{ ml: 1, fontSize: 14, px: 1, py: 0.5 }}
                                                                 >
                                                                     {result.exon1}
                                                                 </Button>
                                                             </Box>
                                                             <Box>
-                                                                <Typography variant="caption" color="text.secondary">
+                                                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: 14 }}>
                                                                     Exon 2:
                                                                 </Typography>
                                                                 <Button
@@ -272,7 +272,7 @@ const SearchPage = () => {
                                                                     to={`/exon/${result.exon2}`}
                                                                     variant="outlined"
                                                                     size="small"
-                                                                    sx={{ ml: 1 }}
+                                                                    sx={{ ml: 1, fontSize: 14, px: 1, py: 0.5 }}
                                                                 >
                                                                     {result.exon2}
                                                                 </Button>
@@ -288,7 +288,7 @@ const SearchPage = () => {
                                                                     to={`/protein/${result.protein1}`}
                                                                     variant="text"
                                                                     size="small"
-                                                                    sx={{ ml: 1 }}
+                                                                    sx={{ ml: 1, px: 1, py: 0.5 }}
                                                                 >
                                                                     {result.protein1}
                                                                 </Button>
@@ -302,7 +302,7 @@ const SearchPage = () => {
                                                                     to={`/protein/${result.protein2}`}
                                                                     variant="text"
                                                                     size="small"
-                                                                    sx={{ ml: 1 }}
+                                                                    sx={{ ml: 1, px: 1, py: 0.5 }}
                                                                 >
                                                                     {result.protein2}
                                                                 </Button>
@@ -321,11 +321,7 @@ const SearchPage = () => {
                                                                 Confidence: {(result.confidence * 100).toFixed(1)}%
                                                             </Typography>
                                                         )}
-                                                        {result.jaccard_percent && (
-                                                            <Typography variant="caption" display="block" color="text.secondary">
-                                                                Jaccard: {result.jaccard_percent}%
-                                                            </Typography>
-                                                        )}
+
                                                     </Box>
                                                 </Box>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

@@ -26,11 +26,9 @@ import toast from 'react-hot-toast';
 
 const ExportPage = () => {
     const [exportConfig, setExportConfig] = useState({
-        type: 'experimental',
+        type: '',
         method: '',
         format: 'json',
-        limit: 1000,
-        min_jaccard: '',
         min_confidence: '',
     });
     const [isExporting, setIsExporting] = useState(false);
@@ -41,11 +39,9 @@ const ExportPage = () => {
 
             const params = {
                 ...exportConfig,
-                limit: parseInt(exportConfig.limit),
             };
 
             // Remove empty filters
-            if (!params.min_jaccard) delete params.min_jaccard;
             if (!params.min_confidence) delete params.min_confidence;
             if (!params.method) delete params.method;
 
@@ -82,20 +78,40 @@ const ExportPage = () => {
     };
 
     const formatOptions = [
-        { value: 'json', label: 'JSON', icon: <Code />, description: 'JavaScript Object Notation' },
-        { value: 'csv', label: 'CSV', icon: <TableChart />, description: 'Comma-separated values' },
-        { value: 'tsv', label: 'TSV', icon: <Description />, description: 'Tab-separated values' },
+        { value: 'json', label: 'JSON', icon: <Code /> },
+        { value: 'csv', label: 'CSV', icon: <TableChart /> },
+        { value: 'tsv', label: 'TSV', icon: <Description /> },
     ];
 
     const methodOptions = [
-        { value: '', label: 'All Methods' },
-        { value: 'contact_based', label: 'Contact-based' },
+        { value: 'All Methods', label: 'All Methods' },
+        { value: 'Contact', label: 'Contact-based' },
         { value: 'PISA', label: 'PISA' },
         { value: 'EPPIC', label: 'EPPIC' },
         { value: 'predicted_contact', label: 'Predicted Contact' },
         { value: 'predicted_PISA', label: 'Predicted PISA' },
         { value: 'predicted_EPPIC', label: 'Predicted EPPIC' },
     ];
+
+    // Filter method options based on interaction type
+    const getFilteredMethodOptions = () => {
+        if (exportConfig.type === 'experimental') {
+            return methodOptions.filter(option =>
+                option.value === 'All Methods' ||
+                option.value === 'Contact' ||
+                option.value === 'PISA' ||
+                option.value === 'EPPIC'
+            );
+        } else if (exportConfig.type === 'predicted') {
+            return methodOptions.filter(option =>
+                option.value === 'All Methods' ||
+                option.value === 'predicted_contact' ||
+                option.value === 'predicted_PISA' ||
+                option.value === 'predicted_EPPIC'
+            );
+        }
+        return methodOptions; // Show all options when "All" is selected
+    };
 
     return (
         <Container maxWidth="lg">
@@ -122,15 +138,17 @@ const ExportPage = () => {
                                     </Typography>
 
                                     <Grid container spacing={3}>
-                                        {/* Data Type */}
-                                        <Grid item xs={12} sm={6}>
-                                            <FormControl fullWidth>
-                                                <InputLabel>Data Type</InputLabel>
+                                        {/* Interaction Type */}
+                                        <Grid item xs={12} sm={8}>
+                                            <FormControl fullWidth size="medium">
+                                                <InputLabel>Interaction Type</InputLabel>
                                                 <Select
                                                     value={exportConfig.type}
-                                                    label="Data Type"
+                                                    label="Interaction Type"
                                                     onChange={(e) => setExportConfig({ ...exportConfig, type: e.target.value })}
+                                                    sx={{ minHeight: '56px', minWidth: '150px' }}
                                                 >
+                                                    <MenuItem value="All">All</MenuItem>
                                                     <MenuItem value="experimental">Experimental Interactions</MenuItem>
                                                     <MenuItem value="predicted">Predicted Interactions</MenuItem>
                                                 </Select>
@@ -139,14 +157,15 @@ const ExportPage = () => {
 
                                         {/* Method */}
                                         <Grid item xs={12} sm={6}>
-                                            <FormControl fullWidth>
+                                            <FormControl fullWidth size="medium">
                                                 <InputLabel>Method</InputLabel>
                                                 <Select
                                                     value={exportConfig.method}
                                                     label="Method"
                                                     onChange={(e) => setExportConfig({ ...exportConfig, method: e.target.value })}
+                                                    sx={{ minHeight: '56px', minWidth: '150px' }}
                                                 >
-                                                    {methodOptions.map((option) => (
+                                                    {getFilteredMethodOptions().map((option) => (
                                                         <MenuItem key={option.value} value={option.value}>
                                                             {option.label}
                                                         </MenuItem>
@@ -157,12 +176,13 @@ const ExportPage = () => {
 
                                         {/* Format */}
                                         <Grid item xs={12} sm={6}>
-                                            <FormControl fullWidth>
+                                            <FormControl fullWidth size="medium">
                                                 <InputLabel>Format</InputLabel>
                                                 <Select
                                                     value={exportConfig.format}
                                                     label="Format"
                                                     onChange={(e) => setExportConfig({ ...exportConfig, format: e.target.value })}
+                                                    sx={{ minHeight: '56px' }}
                                                 >
                                                     {formatOptions.map((option) => (
                                                         <MenuItem key={option.value} value={option.value}>
@@ -181,43 +201,23 @@ const ExportPage = () => {
                                             </FormControl>
                                         </Grid>
 
-                                        {/* Limit */}
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField
-                                                fullWidth
-                                                type="number"
-                                                label="Limit"
-                                                value={exportConfig.limit}
-                                                onChange={(e) => setExportConfig({ ...exportConfig, limit: e.target.value })}
-                                                inputProps={{ min: 1, max: 10000 }}
-                                                helperText="Maximum number of interactions to export (1-10000)"
-                                            />
-                                        </Grid>
-
                                         {/* Filters */}
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField
-                                                fullWidth
-                                                type="number"
-                                                label="Minimum Jaccard Score"
-                                                value={exportConfig.min_jaccard}
-                                                onChange={(e) => setExportConfig({ ...exportConfig, min_jaccard: e.target.value })}
-                                                inputProps={{ min: 0, max: 1, step: 0.01 }}
-                                                helperText="Filter by minimum Jaccard similarity (0-1)"
-                                            />
-                                        </Grid>
-
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField
-                                                fullWidth
-                                                type="number"
-                                                label="Minimum Confidence"
-                                                value={exportConfig.min_confidence}
-                                                onChange={(e) => setExportConfig({ ...exportConfig, min_confidence: e.target.value })}
-                                                inputProps={{ min: 0, max: 1, step: 0.01 }}
-                                                helperText="Filter by minimum confidence score (0-1)"
-                                            />
-                                        </Grid>
+                                        {(exportConfig.type === 'predicted' ||
+                                            exportConfig.method === 'predicted_contact' ||
+                                            exportConfig.method === 'predicted_PISA' ||
+                                            exportConfig.method === 'predicted_EPPIC') && (
+                                                <Grid item xs={12} sm={6}>
+                                                    <TextField
+                                                        fullWidth
+                                                        type="number"
+                                                        label="Minimum Confidence"
+                                                        value={exportConfig.min_confidence}
+                                                        onChange={(e) => setExportConfig({ ...exportConfig, min_confidence: e.target.value })}
+                                                        inputProps={{ min: 0, max: 1, step: 0.01 }}
+                                                        helperText="Filter by minimum confidence score (0-1)"
+                                                    />
+                                                </Grid>
+                                            )}
                                     </Grid>
 
                                     <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
@@ -259,8 +259,7 @@ const ExportPage = () => {
                                         <li>Select the data type (experimental or predicted interactions)</li>
                                         <li>Filter by specific methods if needed</li>
                                         <li>Choose your preferred export format</li>
-                                        <li>Set a limit to control the number of results</li>
-                                        <li>Apply filters using Jaccard score and confidence thresholds</li>
+                                        <li>Apply filters using confidence thresholds</li>
                                     </Typography>
                                 </CardContent>
                             </Card>

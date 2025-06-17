@@ -1,6 +1,6 @@
 "use client";
 
-import { X, GitHub, Web } from "@mui/icons-material";
+import { X, GitHub, Web, LinkedIn } from "@mui/icons-material";
 
 const FooterComponent = () => {
     return (
@@ -9,66 +9,37 @@ const FooterComponent = () => {
                 <div className="w-full">
                     <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
                         <div className="mb-6 md:mb-0">
+
                             <a href="https://eeinet.org" className="flex flex-col items-center">
                                 <img
                                     src="logo_colored.png"
-                                    className="w-20 h-20 mb-2"
+                                    className="w-32 h-32 mb-2"
                                     alt="EEINet Logo"
+                                    style={{ marginLeft: '40px' }}
                                 />
                                 <span className="text-3xl font-semibold whitespace-nowrap text-gray-900">
-                                    EEINet
+                                    &nbsp; &nbsp; EEINet
                                 </span>
                             </a>
-                        </div>
-                        <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6">
-                            <div>
-                                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">
-                                    About
-                                </h2>
-                                <ul className="text-gray-500 font-medium">
-                                    <li className="mb-4">
-                                        <a href="https://eeinet.org/about" className="hover:underline hover:text-gray-700 transition-colors">
-                                            EEINet
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">
-                                    Follow us
-                                </h2>
-                                <ul className="text-gray-500 font-medium">
-                                    <li className="mb-4">
-                                        <a href="#" className="hover:underline hover:text-gray-700 transition-colors">
-                                            CosyBio
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="hover:underline hover:text-gray-700 transition-colors">
-                                            X
-                                        </a>
-                                    </li>
 
-                                </ul>
-                            </div>
-                            <div>
-                                <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">
-                                    Legal
-                                </h2>
-                                <ul className="text-gray-500 font-medium">
-                                    <li className="mb-4">
-                                        <a href="#" className="hover:underline hover:text-gray-700 transition-colors">
-                                            Privacy Policy
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="hover:underline hover:text-gray-700 transition-colors">
-                                            Terms & Conditions
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
+                        <div style={{ marginRight: '20px' }}>
+                            <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase text-center">
+                                Impressum
+                            </h2>
+
+                            <p>Prof. Dr. Jan Baumbach</p>
+                            <p>Chair of Computational Systems Biology</p>
+                            <p>Phone: +49-40-42838-7313</p>
+                            <p>E-Mail: <a href="mailto:cosy[at)zbh.uni-hamburg.de" className="hover:underline hover:text-gray-700 transition-colors">cosy[at)zbh.uni-hamburg.de</a></p>
+                            <p>Address: Prof. Dr. Jan Baumbach</p>
+                            <p>University of Hamburg</p>
+                            <p>Notkestraße 9</p>
+                            <p>22607 Hamburg, Germany</p>
+
+                        </div>
+
+
                     </div>
                     <hr className="my-6 border-gray-200 sm:mx-auto lg:my-8" />
                     <div className="w-full sm:flex sm:items-center sm:justify-between">
@@ -81,8 +52,11 @@ const FooterComponent = () => {
 
                         </span>
                         <div className="flex mt-4 space-x-5 sm:justify-flex sm:mt-0">
-
-
+                            Follow us on: &nbsp;
+                            <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors">
+                                <LinkedIn className="w-4 h-4" />
+                                <span className="sr-only">LinkedIn</span>
+                            </a>
                             <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors">
                                 <X className="w-4 h-4" />
                                 <span className="sr-only">X</span>
@@ -94,12 +68,13 @@ const FooterComponent = () => {
                             <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors">
                                 <Web className="w-4 h-4" />
                                 <span className="sr-only">Website</span>
+                                &nbsp; &nbsp;
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-        </footer>
+        </footer >
     );
 };
 
