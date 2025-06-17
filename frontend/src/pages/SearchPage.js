@@ -38,6 +38,27 @@ const SearchPage = () => {
     const [suggestions, setSuggestions] = useState([]);
     const limit = 20;
 
+    // Create debounced function outside of useCallback
+    const getSuggestions = async (inputValue) => {
+        if (inputValue.length >= 2) {
+            try {
+                const result = await searchAPI.getSuggestions(inputValue, 10);
+                setSuggestions(result.data.suggestions || []);
+            } catch (error) {
+                console.error('Failed to get suggestions:', error);
+                setSuggestions([]);
+            }
+        } else {
+            setSuggestions([]);
+        }
+    };
+
+    // Memoize the debounced function
+    const debouncedGetSuggestions = useCallback(
+        debounce(getSuggestions, 300),
+        [] // Empty dependency array since getSuggestions is stable
+    );
+
     // Search query
     const {
         data: searchResults,
@@ -50,24 +71,6 @@ const SearchPage = () => {
             searchAPI.search(query, searchType, limit, (page - 1) * limit),
         enabled: !!query,
     });
-
-    // Memoized debounced function to fix useEffect dependency
-    const debouncedGetSuggestions = useCallback(
-        debounce(async (inputValue) => {
-            if (inputValue.length >= 2) {
-                try {
-                    const result = await searchAPI.getSuggestions(inputValue, 10);
-                    setSuggestions(result.data.suggestions || []);
-                } catch (error) {
-                    console.error('Failed to get suggestions:', error);
-                    setSuggestions([]);
-                }
-            } else {
-                setSuggestions([]);
-            }
-        }, 300),
-        []
-    );
 
     useEffect(() => {
         debouncedGetSuggestions(query);
@@ -110,49 +113,51 @@ const SearchPage = () => {
 
                 {/* Search Form */}
                 <Paper sx={{ p: 3, mb: 4 }}>
-                    <Grid container spacing={3} alignItems="center">
-                        <Grid item xs={12} md={6}>
-                            <Autocomplete
-                                freeSolo
-                                options={suggestions}
-                                getOptionLabel={(option) =>
-                                    typeof option === 'string' ? option : option.value
-                                }
-                                renderOption={(props, option) => (
-                                    <Box component="li" {...props}>
-                                        <Box>
-                                            <Typography variant="body2">
-                                                {option.value}
-                                            </Typography>
-                                            <Typography variant="caption" color="text.secondary">
-                                                {option.type}
-                                            </Typography>
+                    <Grid container spacing={3} alignItems="center" justifyContent="center">
+                        <Grid item xs={12} md={10} sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <FormControl sx={{ minWidth: 300 }}>
+                                <Autocomplete
+                                    freeSolo
+                                    options={suggestions}
+                                    getOptionLabel={(option) =>
+                                        typeof option === 'string' ? option : option.value
+                                    }
+                                    renderOption={(props, option) => (
+                                        <Box component="li" {...props}>
+                                            <Box>
+                                                <Typography variant="body2">
+                                                    {option.value}
+                                                </Typography>
+                                                <Typography variant="caption" color="text.secondary">
+                                                    {option.type}
+                                                </Typography>
+                                            </Box>
                                         </Box>
-                                    </Box>
-                                )}
-                                inputValue={query}
-                                onInputChange={(event, newInputValue) => {
-                                    setQuery(newInputValue);
-                                }}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        fullWidth
-                                        placeholder="Enter exon ID, protein ID, or gene symbol"
-                                        InputProps={{
-                                            ...params.InputProps,
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <SearchIcon />
-                                                </InputAdornment>
-                                            ),
-                                        }}
-                                    />
-                                )}
-                            />
+                                    )}
+                                    inputValue={query}
+                                    onInputChange={(event, newInputValue) => {
+                                        setQuery(newInputValue);
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            fullWidth
+                                            placeholder="Enter exon ID, protein ID, or gene symbol"
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <SearchIcon />
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </FormControl>
                         </Grid>
                         <Grid item xs={12} md={3}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth sx={{ minWidth: 120 }}>
                                 <InputLabel>Search Type</InputLabel>
                                 <Select
                                     value={searchType}
@@ -166,13 +171,18 @@ const SearchPage = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12} md={3}>
-                            <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Grid item xs={12} md={1}>
+                            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
                                 <Button
                                     variant="contained"
                                     onClick={() => handleSearch()}
                                     disabled={!query.trim()}
                                     fullWidth
+                                    size="medium"
+                                    sx={{
+                                        py: 1.5,
+                                        fontSize: 18
+                                    }}
                                 >
                                     Search
                                 </Button>
@@ -180,6 +190,12 @@ const SearchPage = () => {
                                     variant="outlined"
                                     onClick={handleClear}
                                     startIcon={<Clear />}
+                                    fullWidth
+                                    size="medium"
+                                    sx={{
+                                        py: 1.5,
+                                        fontSize: 18
+                                    }}
                                 >
                                     Clear
                                 </Button>

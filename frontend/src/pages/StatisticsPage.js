@@ -104,7 +104,7 @@ const StatisticsPage = () => {
                     </Typography>
 
                     {/* Summary Statistics */}
-                    <Grid container spacing={3} sx={{ mb: 4 }}>
+                    <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
                         {[
                             { title: 'Total Interactions', value: summary.total_eei_interactions, color: '#1976d2' },
                             { title: 'Experimental EEIs', value: summary.experimental_eeis, color: '#388e3c' },
@@ -139,7 +139,7 @@ const StatisticsPage = () => {
                     </Grid>
 
                     {/* Method Distribution */}
-                    <Grid container spacing={3} sx={{ mb: 4 }}>
+                    <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
                         <Grid item xs={12} lg={8}>
                             <motion.div
                                 initial={{ opacity: 0, x: -20 }}
@@ -151,7 +151,7 @@ const StatisticsPage = () => {
                                         <Typography variant="h6" gutterBottom>
                                             Interactions by Method
                                         </Typography>
-                                        <ResponsiveContainer width="100%" height={300}>
+                                        <ResponsiveContainer width="100%" height={300} minWidth={400}>
                                             <BarChart data={methodData}>
                                                 <CartesianGrid strokeDasharray="3 3" />
                                                 <XAxis dataKey="method" />
@@ -177,7 +177,7 @@ const StatisticsPage = () => {
                                         <Typography variant="h6" gutterBottom>
                                             Method Types
                                         </Typography>
-                                        <ResponsiveContainer width="100%" height={300}>
+                                        <ResponsiveContainer width="100%" height={300} minWidth={400}>
                                             <PieChart>
                                                 <Pie
                                                     data={[
@@ -206,7 +206,7 @@ const StatisticsPage = () => {
                     </Grid>
 
                     {/* Quality Distributions */}
-                    <Grid container spacing={3} sx={{ mb: 4 }}>
+                    <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
                         <Grid item xs={12} md={6}>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
@@ -260,65 +260,69 @@ const StatisticsPage = () => {
 
                     {/* Confidence Statistics for Predicted Methods */}
                     {confidence.length > 0 && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.6 }}
-                        >
-                            <Card>
-                                <CardContent>
-                                    <Typography variant="h6" gutterBottom>
-                                        Prediction Confidence Statistics
-                                    </Typography>
-                                    <Grid container spacing={2}>
-                                        {confidence.map((method, index) => (
-                                            <Grid item xs={12} md={4} key={method.method_name}>
-                                                <Card variant="outlined">
-                                                    <CardContent>
-                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                                            <Typography variant="subtitle1">
-                                                                {method.method_name}
-                                                            </Typography>
-                                                            <Chip
-                                                                label={`${method.total_interactions} interactions`}
-                                                                size="small"
-                                                                color="primary"
-                                                            />
-                                                        </Box>
-                                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                <Typography variant="body2" color="text.secondary">
-                                                                    Average:
-                                                                </Typography>
-                                                                <Typography variant="body2">
-                                                                    {(parseFloat(method.avg_confidence) * 100).toFixed(1)}%
-                                                                </Typography>
-                                                            </Box>
-                                                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                <Typography variant="body2" color="text.secondary">
-                                                                    Median:
-                                                                </Typography>
-                                                                <Typography variant="body2">
-                                                                    {(parseFloat(method.median_confidence) * 100).toFixed(1)}%
-                                                                </Typography>
-                                                            </Box>
-                                                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                <Typography variant="body2" color="text.secondary">
-                                                                    Range:
-                                                                </Typography>
-                                                                <Typography variant="body2">
-                                                                    {(parseFloat(method.min_confidence) * 100).toFixed(1)}% - {(parseFloat(method.max_confidence) * 100).toFixed(1)}%
-                                                                </Typography>
-                                                            </Box>
-                                                        </Box>
-                                                    </CardContent>
-                                                </Card>
+                        <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
+                            <Grid item xs={12}>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.6, delay: 0.6 }}
+                                >
+                                    <Card>
+                                        <CardContent>
+                                            <Typography variant="h6" gutterBottom>
+                                                Prediction Confidence Statistics
+                                            </Typography>
+                                            <Grid container spacing={3}>
+                                                {confidence.map((method, index) => (
+                                                    <Grid item xs={12} md={4} key={method.method_name}>
+                                                        <Card variant="outlined">
+                                                            <CardContent>
+                                                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, gap: 2 }}>
+                                                                    <Typography variant="subtitle1">
+                                                                        {method.method_name}
+                                                                    </Typography>
+                                                                    <Chip
+                                                                        label={`${method.total_interactions} interactions`}
+                                                                        size="small"
+                                                                        color="primary"
+                                                                    />
+                                                                </Box>
+                                                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                                        <Typography variant="body2" color="text.secondary">
+                                                                            Average:
+                                                                        </Typography>
+                                                                        <Typography variant="body2">
+                                                                            {(parseFloat(method.avg_confidence) * 100).toFixed(1)}%
+                                                                        </Typography>
+                                                                    </Box>
+                                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                                        <Typography variant="body2" color="text.secondary">
+                                                                            Median:
+                                                                        </Typography>
+                                                                        <Typography variant="body2">
+                                                                            {(parseFloat(method.median_confidence) * 100).toFixed(1)}%
+                                                                        </Typography>
+                                                                    </Box>
+                                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                                        <Typography variant="body2" color="text.secondary">
+                                                                            Range:
+                                                                        </Typography>
+                                                                        <Typography variant="body2">
+                                                                            {(parseFloat(method.min_confidence) * 100).toFixed(1)}% - {(parseFloat(method.max_confidence) * 100).toFixed(1)}%
+                                                                        </Typography>
+                                                                    </Box>
+                                                                </Box>
+                                                            </CardContent>
+                                                        </Card>
+                                                    </Grid>
+                                                ))}
                                             </Grid>
-                                        ))}
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
+                                        </CardContent>
+                                    </Card>
+                                </motion.div>
+                            </Grid>
+                        </Grid>
                     )}
                 </motion.div>
             </Box>

@@ -15,16 +15,16 @@ import {
 } from '@mui/material';
 import {
     Search as SearchIcon,
-    Science,
-    AccountTree,
     BarChart,
-    FileDownload,
-    TrendingUp,
 } from '@mui/icons-material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDna, faVial, faCalculator, faSearch, faHexagonNodes, faFileExport } from '@fortawesome/free-solid-svg-icons';
+import { faAtom } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { statsAPI } from '../services/api';
+import FooterComponent from '../components/layout/Footer';
 
 const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -44,14 +44,14 @@ const HomePage = () => {
 
     const features = [
         {
-            icon: <SearchIcon />,
+            icon: <FontAwesomeIcon icon={faSearch} size="lg" />,
             title: 'Advanced Search',
             description: 'Search exon, protein, or gene across species',
             link: '/search',
             color: '#1976d2',
         },
         {
-            icon: <AccountTree />,
+            icon: <FontAwesomeIcon icon={faHexagonNodes} size="lg" />,
             title: 'Network Visualization',
             description: 'Interactive visualization of exon-exon interaction networks',
             link: '/network',
@@ -65,7 +65,7 @@ const HomePage = () => {
             color: '#f57c00',
         },
         {
-            icon: <FileDownload />,
+            icon: <FontAwesomeIcon icon={faFileExport} size="lg" />,
             title: 'Data Export',
             description: 'Export interaction data in multiple formats (CSV, TSV, JSON)',
             link: '/export',
@@ -77,26 +77,31 @@ const HomePage = () => {
         {
             title: 'Total Interactions',
             value: stats?.data?.total_eei_interactions || 72657,
-            icon: <TrendingUp />,
+            icon: <FontAwesomeIcon icon={faDna} size="lg" />,
             color: '#1976d2',
+            gradient: 'linear-gradient(45deg, #1976d2, #64b5f6)',
         },
         {
             title: 'Experimental EEIs',
             value: stats?.data?.experimental_eeis || 72352,
-            icon: <Science />,
+            icon: <FontAwesomeIcon icon={faAtom} size="lg" />,
             color: '#388e3c',
+            gradient: 'linear-gradient(45deg, #388e3c, #81c784)',
         },
         {
             title: 'Unique Exons',
             value: stats?.data?.unique_exons || 12769,
-            icon: <AccountTree />,
-            color: '#f57c0',
+            icon: <FontAwesomeIcon icon={faVial} size="lg" />,
+            color: '#f57c00',
+            gradient: 'linear-gradient(45deg, #f57c00, #ffb74d)',
         },
         {
             title: 'Unique Proteins',
             value: stats?.data?.unique_proteins || 3166,
-            icon: <Science />,
+            icon: <FontAwesomeIcon icon={faCalculator} size="lg" />,
             color: '#7b1fa2',
+            gradient: 'linear-gradient(45deg, #7b1fa2, #ba68c8)',
+
         },
     ];
 
@@ -136,7 +141,7 @@ const HomePage = () => {
                                 WebkitTextFillColor: 'transparent',
                             }}
                         >
-                            The Exon-Exon Interaction Network Database
+                            The Exon-Exon Interactions Database
                         </Typography>
                         <Typography
                             variant="h5"
@@ -144,7 +149,8 @@ const HomePage = () => {
                             paragraph
                             sx={{ maxWidth: 600, mx: 'auto', mb: 4 }}
                         >
-                            Explore human exon-exon interactions across species with experimental and predicted data
+                            A comprehensive resource for human exon-exon interaction data
+
                         </Typography>
 
                         {/* Search Bar */}
@@ -163,7 +169,7 @@ const HomePage = () => {
                         >
                             <TextField
                                 fullWidth
-                                placeholder="Search exons, proteins, or genes (e.g., ENSE00001126122, TP53)"
+                                placeholder="Search exons, proteins, or genes (e.g., ENSE00001126122, 8bzl)"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 InputProps={{
@@ -180,7 +186,8 @@ const HomePage = () => {
                                 type="submit"
                                 variant="contained"
                                 size="large"
-                                sx={{ px: 3 }}
+
+                                sx={{ px: 3, py: 1.5 }}
                             >
                                 Search
                             </Button>
@@ -188,7 +195,7 @@ const HomePage = () => {
 
                         {/* Quick Search Chips */}
                         <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
-                            {['ENSE00001126122', 'TP53', 'BRCA1', 'P53'].map((term) => (
+                            {['ENSE00001126122', '8bzl', 'P28072'].map((term) => (
                                 <Chip
                                     key={term}
                                     label={term}
@@ -232,7 +239,18 @@ const HomePage = () => {
                                             >
                                                 {stat.icon}
                                             </Box>
-                                            <Typography variant="h4" component="div" gutterBottom>
+                                            <Typography
+                                                variant="h4"
+                                                component="div"
+                                                gutterBottom
+                                                sx={{
+                                                    background: stat.gradient,
+                                                    backgroundClip: 'text',
+                                                    WebkitBackgroundClip: 'text',
+                                                    WebkitTextFillColor: 'transparent',
+                                                    fontWeight: 600
+                                                }}
+                                            >
                                                 {isLoading ? '...' : stat.value.toLocaleString()}
                                             </Typography>
                                             <Typography variant="body2" color="text.secondary">
@@ -315,14 +333,14 @@ const HomePage = () => {
                     transition={{ duration: 0.6, delay: 0.6 }}
                 >
                     <Box sx={{ mt: 6, textAlign: 'center' }}>
-                        <Typography variant="h5" component="h2" gutterBottom>
+                        <Typography variant="h4" component="h2" gutterBottom>
                             Detection Methods
                         </Typography>
                         <Typography variant="body1" color="text.secondary" paragraph>
                             Our database includes EEI data from multiple detection methods:
                         </Typography>
                         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-                            {['Contact-based', 'PISA', 'EPPIC', 'Orthology-based Predictions'].map((method) => (
+                            {['Contact-based', 'PISA-based', 'EPPIC-based', 'Orthology-based Predictions'].map((method) => (
                                 <Chip
                                     key={method}
                                     label={method}
@@ -334,6 +352,7 @@ const HomePage = () => {
                     </Box>
                 </motion.div>
             </Box>
+            <FooterComponent />
         </Container>
     );
 };

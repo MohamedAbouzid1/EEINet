@@ -32,7 +32,132 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
+/* Modern utility classes */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(103, 126, 234, 0.1);
+}
+
+.hover-lift {
+  transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(103, 126, 234, 0.2);
+}
+
+.card-modern {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(103, 126, 234, 0.1);
+  box-shadow: 0 4px 20px rgba(103, 126, 234, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-modern:hover {
+  box-shadow: 0 8px 30px rgba(103, 126, 234, 0.15);
+  transform: translateY(-2px);
+}
+
+.button-modern {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+  text-transform: none;
+}
+
+.button-modern:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(103, 126, 234, 0.3);
+}
+
+.button-outline {
+  background: transparent;
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  color: #667eea;
+  font-weight: 600;
+  padding: 10px 22px;
+  transition: all 0.3s ease;
+  text-transform: none;
+}
+
+.button-outline:hover {
+  background: rgba(103, 126, 234, 0.1);
+  border-color: #5a6fd8;
+  color: #5a6fd8;
+  transform: translateY(-1px);
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive utilities */
+.container-modern {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .container-modern {
+    padding: 0 16px;
+  }
+}
+
+@import 'flowbite/dist/flowbite.min.css';

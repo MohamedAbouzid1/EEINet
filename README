@@ -1,0 +1,6 @@
+database server start
+
+alias start_pg='pg_ctl -D ~/pgsql/data -l ~/pgsql/logfile start'
+alias stop_pg='pg_ctl -D ~/pgsql/data stop'
+
+psql -d eei_network_db
