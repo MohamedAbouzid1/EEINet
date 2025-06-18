@@ -58,6 +58,13 @@ router.get('/exon/:exon_id/interactions',
   exonController.getExonInteractions
 );
 
+router.get('/exon/:exon_id/interactions/detailed',
+  validateExonId,
+  validatePagination,
+  validateMethod,
+  exonController.getExonDetailedInteractions
+);
+
 // PROTEIN ROUTES
 router.get('/protein/:protein_id',
   validateProteinId,

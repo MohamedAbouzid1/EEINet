@@ -18,11 +18,15 @@ import {
     Alert,
     Tabs,
     Tab,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
 } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { exonAPI } from '../services/api';
 import { motion } from 'framer-motion';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const ExonDetailsPage = () => {
     const { exonId } = useParams();
@@ -36,6 +40,11 @@ const ExonDetailsPage = () => {
     const { data: interactionsData, isLoading: interactionsLoading } = useQuery({
         queryKey: ['exon-interactions', exonId],
         queryFn: () => exonAPI.getExonInteractions(exonId, { limit: 100 }),
+    });
+
+    const { data: detailedInteractionsData, isLoading: detailedInteractionsLoading } = useQuery({
+        queryKey: ['exon-detailed-interactions', exonId],
+        queryFn: () => exonAPI.getExonDetailedInteractions(exonId, { limit: 100 }),
     });
 
     if (exonLoading) {
@@ -62,6 +71,31 @@ const ExonDetailsPage = () => {
 
     const exon = exonData?.data;
     const interactions = interactionsData?.data?.interactions || [];
+    const detailedInteractions = detailedInteractionsData?.data?.interactions || [];
+
+    const renderMethodSpecificData = (methodData) => {
+        if (!methodData) return 'N/A';
+
+        try {
+            const data = typeof methodData === 'string' ? JSON.parse(methodData) : methodData;
+            return (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                    {Object.entries(data).map(([key, value]) => (
+                        <Box key={key} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Typography variant="body2" color="text.secondary">
+                                {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}:
+                            </Typography>
+                            <Typography variant="body2">
+                                {typeof value === 'number' ? value.toFixed(3) : value}
+                            </Typography>
+                        </Box>
+                    ))}
+                </Box>
+            );
+        } catch (error) {
+            return 'Invalid data format';
+        }
+    };
 
     return (
         <Container maxWidth="lg">
@@ -185,101 +219,238 @@ const ExonDetailsPage = () => {
                         <CardContent>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
                                 <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
-                                    <Tab label={`Interactions (${interactions.length})`} />
+                                    <Tab label={`Basic Interactions (${interactions.length})`} />
+                                    <Tab label={`Detailed Interactions (${detailedInteractions.length})`} />
                                 </Tabs>
                             </Box>
 
-                            {interactionsLoading ? (
-                                <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-                                    <CircularProgress />
-                                </Box>
-                            ) : interactions.length > 0 ? (
-                                <TableContainer>
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Partner Exon</TableCell>
-                                                <TableCell>Proteins</TableCell>
-                                                <TableCell>Method</TableCell>
-                                                <TableCell>Jaccard %</TableCell>
-                                                <TableCell>Confidence</TableCell>
-                                                <TableCell>PDB</TableCell>
-                                                <TableCell>Actions</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {interactions.map((interaction) => {
-                                                const partnerExon = interaction.exon1 === exonId ? interaction.exon2 : interaction.exon1;
-                                                return (
-                                                    <TableRow key={interaction.eei_id}>
-                                                        <TableCell>
-                                                            <Button
-                                                                component={Link}
-                                                                to={`/exon/${partnerExon}`}
-                                                                variant="text"
-                                                                size="small"
-                                                            >
-                                                                {partnerExon}
-                                                            </Button>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Box sx={{ display: 'flex', gap: 1 }}>
-                                                                <Button
-                                                                    component={Link}
-                                                                    to={`/protein/${interaction.protein1}`}
-                                                                    variant="outlined"
-                                                                    size="small"
-                                                                >
-                                                                    {interaction.protein1}
-                                                                </Button>
-                                                                <Button
-                                                                    component={Link}
-                                                                    to={`/protein/${interaction.protein2}`}
-                                                                    variant="outlined"
-                                                                    size="small"
-                                                                >
-                                                                    {interaction.protein2}
-                                                                </Button>
-                                                            </Box>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Chip
-                                                                label={interaction.method_name}
-                                                                size="small"
-                                                                color={interaction.method_type === 'experimental' ? 'primary' : 'secondary'}
-                                                            />
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {interaction.jaccard_percent ? `${interaction.jaccard_percent}%` : 'N/A'}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {interaction.confidence ? `${(interaction.confidence * 100).toFixed(1)}%` : 'N/A'}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {interaction.pdb_id ? (
-                                                                <Chip label={interaction.pdb_id} size="small" variant="outlined" />
-                                                            ) : 'N/A'}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Button
-                                                                component={Link}
-                                                                to={`/interaction/${interaction.eei_id}`}
-                                                                variant="contained"
-                                                                size="small"
-                                                            >
-                                                                Details
-                                                            </Button>
-                                                        </TableCell>
+                            {tabValue === 0 && (
+                                <>
+                                    {interactionsLoading ? (
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                                            <CircularProgress />
+                                        </Box>
+                                    ) : interactions.length > 0 ? (
+                                        <TableContainer>
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>Partner Exon</TableCell>
+                                                        <TableCell>Proteins</TableCell>
+                                                        <TableCell>Method</TableCell>
+                                                        <TableCell>Jaccard %</TableCell>
+                                                        <TableCell>Confidence</TableCell>
+                                                        <TableCell>PDB</TableCell>
+                                                        <TableCell>Actions</TableCell>
                                                     </TableRow>
-                                                );
-                                            })}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            ) : (
-                                <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
-                                    No interactions found for this exon.
-                                </Typography>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {interactions.map((interaction) => {
+                                                        const partnerExon = interaction.exon1 === exonId ? interaction.exon2 : interaction.exon1;
+                                                        return (
+                                                            <TableRow key={interaction.eei_id}>
+                                                                <TableCell>
+                                                                    <Button
+                                                                        component={Link}
+                                                                        to={`/exon/${partnerExon}`}
+                                                                        variant="text"
+                                                                        size="small"
+                                                                    >
+                                                                        {partnerExon}
+                                                                    </Button>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Box sx={{ display: 'flex', gap: 1 }}>
+                                                                        <Button
+                                                                            component={Link}
+                                                                            to={`/protein/${interaction.protein1}`}
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                        >
+                                                                            {interaction.protein1}
+                                                                        </Button>
+                                                                        <Button
+                                                                            component={Link}
+                                                                            to={`/protein/${interaction.protein2}`}
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                        >
+                                                                            {interaction.protein2}
+                                                                        </Button>
+                                                                    </Box>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Chip
+                                                                        label={interaction.method_name}
+                                                                        size="small"
+                                                                        color={interaction.method_type === 'experimental' ? 'primary' : 'secondary'}
+                                                                    />
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {interaction.jaccard_percent ? `${interaction.jaccard_percent}%` : 'N/A'}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {interaction.confidence ? `${(interaction.confidence * 100).toFixed(1)}%` : 'N/A'}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {interaction.pdb_id ? (
+                                                                        <Chip label={interaction.pdb_id} size="small" variant="outlined" />
+                                                                    ) : 'N/A'}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Button
+                                                                        component={Link}
+                                                                        to={`/interaction/${interaction.eei_id}`}
+                                                                        variant="contained"
+                                                                        size="small"
+                                                                    >
+                                                                        Details
+                                                                    </Button>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        );
+                                                    })}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    ) : (
+                                        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
+                                            No interactions found for this exon.
+                                        </Typography>
+                                    )}
+                                </>
+                            )}
+
+                            {tabValue === 1 && (
+                                <>
+                                    {detailedInteractionsLoading ? (
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                                            <CircularProgress />
+                                        </Box>
+                                    ) : detailedInteractions.length > 0 ? (
+                                        <TableContainer>
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>Partner Exon</TableCell>
+                                                        <TableCell>Proteins</TableCell>
+                                                        <TableCell>Genes</TableCell>
+                                                        <TableCell>Method</TableCell>
+                                                        <TableCell>Jaccard %</TableCell>
+                                                        <TableCell>Confidence</TableCell>
+                                                        <TableCell>PDB</TableCell>
+                                                        <TableCell>Amino Acids</TableCell>
+                                                        <TableCell>Method Details</TableCell>
+                                                        <TableCell>Actions</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {detailedInteractions.map((interaction) => {
+                                                        const partnerExon = interaction.exon1 === exonId ? interaction.exon2 : interaction.exon1;
+                                                        const partnerGene = interaction.exon1 === exonId ? interaction.gene2 : interaction.gene1;
+                                                        const currentGene = interaction.exon1 === exonId ? interaction.gene1 : interaction.gene2;
+                                                        return (
+                                                            <TableRow key={interaction.eei_id}>
+                                                                <TableCell>
+                                                                    <Button
+                                                                        component={Link}
+                                                                        to={`/exon/${partnerExon}`}
+                                                                        variant="text"
+                                                                        size="small"
+                                                                    >
+                                                                        {partnerExon}
+                                                                    </Button>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Box sx={{ display: 'flex', gap: 1 }}>
+                                                                        <Button
+                                                                            component={Link}
+                                                                            to={`/protein/${interaction.protein1}`}
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                        >
+                                                                            {interaction.protein1}
+                                                                        </Button>
+                                                                        <Button
+                                                                            component={Link}
+                                                                            to={`/protein/${interaction.protein2}`}
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                        >
+                                                                            {interaction.protein2}
+                                                                        </Button>
+                                                                    </Box>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                                                                        <Typography variant="body2">
+                                                                            {currentGene || 'N/A'}
+                                                                        </Typography>
+                                                                        <Typography variant="body2" color="text.secondary">
+                                                                            {partnerGene || 'N/A'}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Chip
+                                                                        label={interaction.method_name}
+                                                                        size="small"
+                                                                        color={interaction.method_type === 'experimental' ? 'primary' : 'secondary'}
+                                                                    />
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {interaction.jaccard_percent ? `${interaction.jaccard_percent}%` : 'N/A'}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {interaction.confidence ? `${(interaction.confidence * 100).toFixed(1)}%` : 'N/A'}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {interaction.pdb_id ? (
+                                                                        <Chip label={interaction.pdb_id} size="small" variant="outlined" />
+                                                                    ) : 'N/A'}
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                                                                        <Typography variant="body2">
+                                                                            {interaction.aa1 || 'N/A'}
+                                                                        </Typography>
+                                                                        <Typography variant="body2" color="text.secondary">
+                                                                            {interaction.aa2 || 'N/A'}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Accordion>
+                                                                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                                                            <Typography variant="body2">View Details</Typography>
+                                                                        </AccordionSummary>
+                                                                        <AccordionDetails>
+                                                                            {renderMethodSpecificData(interaction.method_specific_data)}
+                                                                        </AccordionDetails>
+                                                                    </Accordion>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Button
+                                                                        component={Link}
+                                                                        to={`/interaction/${interaction.eei_id}`}
+                                                                        variant="contained"
+                                                                        size="small"
+                                                                    >
+                                                                        Details
+                                                                    </Button>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        );
+                                                    })}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    ) : (
+                                        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
+                                            No detailed interactions found for this exon.
+                                        </Typography>
+                                    )}
+                                </>
                             )}
                         </CardContent>
                     </Card>

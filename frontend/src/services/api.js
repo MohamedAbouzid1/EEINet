@@ -45,6 +45,8 @@ export const exonAPI = {
     getExon: (exonId) => api.get(`/exon/${exonId}`),
     getExonInteractions: (exonId, params = {}) =>
         api.get(`/exon/${exonId}/interactions`, { params }),
+    getExonDetailedInteractions: (exonId, params = {}) =>
+        api.get(`/exon/${exonId}/interactions/detailed`, { params }),
 };
 
 export const proteinAPI = {

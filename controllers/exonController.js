@@ -78,6 +78,52 @@ const exonController = {
         } catch (error) {
             handleError(error, res);
         }
+    },
+
+    // GET /api/exon/{exon_id}/interactions/detailed
+    async getExonDetailedInteractions(req, res) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(StatusCodes.BAD_REQUEST).json({
+                    success: false,
+                    errors: errors.array()
+                });
+            }
+
+            const { exon_id } = req.params;
+            const { limit = 50, offset = 0, method } = req.query;
+
+            // Check if exon exists
+            const exon = await Exon.findById(exon_id);
+            if (!exon) {
+                return res.status(StatusCodes.NOT_FOUND).json({
+                    success: false,
+                    message: 'Exon not found'
+                });
+            }
+
+            const [interactions, totalCount] = await Promise.all([
+                Exon.getDetailedInteractions(exon_id, parseInt(limit), parseInt(offset), method),
+                Exon.getInteractionCount(exon_id, method)
+            ]);
+
+            res.json({
+                success: true,
+                data: {
+                    exon: exon,
+                    interactions: interactions,
+                    pagination: {
+                        total: totalCount,
+                        limit: parseInt(limit),
+                        offset: parseInt(offset),
+                        hasMore: parseInt(offset) + parseInt(limit) < totalCount
+                    }
+                }
+            });
+        } catch (error) {
+            handleError(error, res);
+        }
     }
 };
 

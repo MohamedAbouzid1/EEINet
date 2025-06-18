@@ -83,3 +83,9 @@ COPY temp_exon_gene_mapping (
 FROM '/cosybio/project/mabouzid/EEI_networks/EEI-Conservation-main/data/ensembl_gtf/exon_gene_mapping.csv' WITH (FORMAT CSV, HEADER TRUE);
 SELECT COUNT(*)
 FROM export_eei_by_method('predicted_EPPIC');
+SELECT *
+FROM export_eei_by_method('PISA')
+LIMIT 10;
+SELECT *
+FROM export_eei_by_method('EPPIC')
+LIMIT 10;
