@@ -53,22 +53,19 @@ const FooterComponent = () => {
                         </span>
                         <div className="flex mt-4 space-x-5 sm:justify-flex sm:mt-0">
                             Follow us on: &nbsp;
-                            <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors">
+                            <a href="https://www.linkedin.com/company/cosy-bio/" className="text-gray-500 hover:text-gray-900 transition-colors">
                                 <LinkedIn className="w-4 h-4" />
                                 <span className="sr-only">LinkedIn</span>
                             </a>
-                            <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors">
+                            <a href="https://x.com/cosybio_UHH" className="text-gray-500 hover:text-gray-900 transition-colors">
                                 <X className="w-4 h-4" />
                                 <span className="sr-only">X</span>
                             </a>
-                            <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors">
-                                <GitHub className="w-4 h-4" />
-                                <span className="sr-only">GitHub</span>
-                            </a>
-                            <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors">
+
+                            <a href="https://www.cosy.bio/" className="text-gray-500 hover:text-gray-900 transition-colors">
                                 <Web className="w-4 h-4" />
                                 <span className="sr-only">Website</span>
-                                &nbsp; &nbsp;
+                                &nbsp; &nbsp; &nbsp;&nbsp;
                             </a>
                         </div>
                     </div>

@@ -241,7 +241,7 @@ function App() {
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="/exon/:exonId" element={<ExonDetailsPage />} />
                 <Route path="/protein/:proteinId" element={<ProteinDetailsPage />} />
-                {/*<Route path="/interaction/:interactionId" element={<InteractionDetailsPage />} />*/}
+                <Route path="/interaction/:interactionId" element={<InteractionDetailsPage />} />
                 <Route path="/statistics" element={<StatisticsPage />} />
                 {/*<Route path="/network" element={<NetworkVisualizationPage />} />*/}
                 <Route path="/export" element={<ExportPage />} />
