@@ -13,6 +13,8 @@ import {
     MenuItem,
     TextField,
     LinearProgress,
+    FormControlLabel,
+    Checkbox,
 } from '@mui/material';
 import {
     FileDownload,
@@ -30,6 +32,7 @@ const ExportPage = () => {
         method: '',
         format: 'json',
         min_confidence: '',
+        export_all: false,
     });
     const [isExporting, setIsExporting] = useState(false);
 
@@ -44,6 +47,12 @@ const ExportPage = () => {
             // Remove empty filters
             if (!params.min_confidence) delete params.min_confidence;
             if (!params.method) delete params.method;
+
+            // Set limit based on export_all checkbox
+            if (params.export_all) {
+                params.limit = 'all';
+            }
+            delete params.export_all; // Remove from params as it's not a backend parameter
 
             const response = await exportAPI.exportInteractions(params);
 
@@ -201,6 +210,20 @@ const ExportPage = () => {
                                             </FormControl>
                                         </Grid>
 
+                                        {/* Export All Records Option */}
+                                        <Grid item xs={12}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={exportConfig.export_all}
+                                                        onChange={(e) => setExportConfig({ ...exportConfig, export_all: e.target.checked })}
+                                                        color="primary"
+                                                    />
+                                                }
+                                                label="Export All Records (uncheck to limit to 1000 records)"
+                                            />
+                                        </Grid>
+
                                         {/* Filters */}
                                         {(exportConfig.type === 'predicted' ||
                                             exportConfig.method === 'predicted_contact' ||
@@ -259,6 +282,7 @@ const ExportPage = () => {
                                         <li>Select the data type (experimental or predicted interactions)</li>
                                         <li>Filter by specific methods if needed</li>
                                         <li>Choose your preferred export format</li>
+                                        <li>Check "Export All Records" to get complete datasets</li>
                                         <li>Apply filters using confidence thresholds</li>
                                     </Typography>
                                 </CardContent>

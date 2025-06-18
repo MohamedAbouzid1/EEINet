@@ -28,7 +28,7 @@ const validators = {
     // Method validator
     method: query('method')
         .optional()
-        .isIn(['contact_based', 'PISA', 'EPPIC', 'predicted_contact', 'predicted_PISA', 'predicted_EPPIC'])
+        .isIn(['Contact', 'PISA', 'EPPIC', 'predicted_contact', 'predicted_PISA', 'predicted_EPPIC', 'All Methods'])
         .withMessage('Invalid method'),
 
     // Search validators

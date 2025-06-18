@@ -11,7 +11,7 @@ import HomePage from './pages/HomePage';
 import SearchPage from './pages/SearchPage';
 import ExonDetailsPage from './pages/ExonDetailsPage';
 import ProteinDetailsPage from './pages/ProteinDetailsPage';
-//import InteractionDetailsPage from './pages/InteractionDetailsPage';
+import InteractionDetailsPage from './pages/InteractionDetailsPage';
 import StatisticsPage from './pages/StatisticsPage';
 //import NetworkVisualizationPage from './pages/NetworkVisualizationPage';
 import ExportPage from './pages/ExportPage';

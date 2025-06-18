@@ -29,8 +29,20 @@ const validatePagination = [
   query('offset').optional().isInt({ min: 0 }).withMessage('Offset must be >= 0')
 ];
 
+const validateExportPagination = [
+  query('limit').optional().custom((value) => {
+    if (value === 'all' || value === 'ALL') return true;
+    const num = parseInt(value);
+    if (isNaN(num) || num < 1) {
+      throw new Error('Limit must be a positive integer or "all"');
+    }
+    return true;
+  }),
+  query('offset').optional().isInt({ min: 0 }).withMessage('Offset must be >= 0')
+];
+
 const validateMethod = [
-  query('method').optional().isIn(['contact_based', 'PISA', 'EPPIC', 'predicted_contact', 'predicted_PISA', 'predicted_EPPIC']).withMessage('Invalid method')
+  query('method').optional().isIn(['Contact', 'PISA', 'EPPIC', 'predicted_contact', 'predicted_PISA', 'predicted_EPPIC', 'All Methods']).withMessage('Invalid method')
 ];
 
 // EXON ROUTES
@@ -92,7 +104,7 @@ router.get('/stats/confidence', statsController.getConfidenceStats);
 
 // EXPORT ROUTES
 router.get('/export/interactions',
-  validatePagination,
+  validateExportPagination,
   validateMethod,
   query('format').optional().isIn(['csv', 'tsv', 'json']).withMessage('Format must be csv, tsv, or json'),
   exportController.exportInteractions

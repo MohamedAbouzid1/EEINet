@@ -1,26 +1,33 @@
 const db = require('../db/connect');
 
 class Interaction {
-    static async getExperimental(limit = 50, offset = 0, method = null, minJaccard = null) {
-        let filters = [];
-        let params = [limit, offset];
-        let paramIndex = 3;
+  static async getExperimental(limit = 50, offset = 0, method = null, minJaccard = null) {
+    let filters = [];
+    let params = [];
+    let paramIndex = 1;
 
-        if (method) {
-            filters.push(`em.method_name = $${paramIndex}`);
-            params.push(method);
-            paramIndex++;
-        }
+    if (method) {
+      filters.push(`em.method_name = $${paramIndex}`);
+      params.push(method);
+      paramIndex++;
+    }
 
-        if (minJaccard) {
-            filters.push(`ei.jaccard_percent >= $${paramIndex}`);
-            params.push(minJaccard);
-            paramIndex++;
-        }
+    if (minJaccard) {
+      filters.push(`ei.jaccard_percent >= $${paramIndex}`);
+      params.push(minJaccard);
+      paramIndex++;
+    }
 
-        const whereClause = filters.length > 0 ? `AND ${filters.join(' AND ')}` : '';
+    const whereClause = filters.length > 0 ? `AND ${filters.join(' AND ')}` : '';
 
-        const query = `
+    // Handle limit for export (null means no limit)
+    let limitClause = '';
+    if (limit !== null) {
+      limitClause = `LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+      params.push(limit, offset);
+    }
+
+    const query = `
       SELECT 
         ei.eei_id,
         e1.ensembl_exon_id as exon1,
@@ -42,33 +49,40 @@ class Interaction {
       WHERE em.method_type = 'experimental'
       ${whereClause}
       ORDER BY ei.jaccard_percent DESC NULLS LAST, ei.eei_id
-      LIMIT $1 OFFSET $2
+      ${limitClause}
     `;
 
-        const result = await db.query(query, params);
-        return result.rows;
+    const result = await db.query(query, params);
+    return result.rows;
+  }
+
+  static async getPredicted(limit = 50, offset = 0, method = null, minConfidence = null) {
+    let filters = [];
+    let params = [];
+    let paramIndex = 1;
+
+    if (method) {
+      filters.push(`em.method_name = $${paramIndex}`);
+      params.push(method);
+      paramIndex++;
     }
 
-    static async getPredicted(limit = 50, offset = 0, method = null, minConfidence = null) {
-        let filters = [];
-        let params = [limit, offset];
-        let paramIndex = 3;
+    if (minConfidence) {
+      filters.push(`eom.confidence >= $${paramIndex}`);
+      params.push(minConfidence);
+      paramIndex++;
+    }
 
-        if (method) {
-            filters.push(`em.method_name = $${paramIndex}`);
-            params.push(method);
-            paramIndex++;
-        }
+    const whereClause = filters.length > 0 ? `AND ${filters.join(' AND ')}` : '';
 
-        if (minConfidence) {
-            filters.push(`eom.confidence >= $${paramIndex}`);
-            params.push(minConfidence);
-            paramIndex++;
-        }
+    // Handle limit for export (null means no limit)
+    let limitClause = '';
+    if (limit !== null) {
+      limitClause = `LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+      params.push(limit, offset);
+    }
 
-        const whereClause = filters.length > 0 ? `AND ${filters.join(' AND ')}` : '';
-
-        const query = `
+    const query = `
       SELECT 
         ei.eei_id,
         e1.ensembl_exon_id as exon1,
@@ -96,15 +110,15 @@ class Interaction {
       WHERE em.method_type = 'predicted'
       ${whereClause}
       ORDER BY eom.confidence DESC, ei.eei_id
-      LIMIT $1 OFFSET $2
+      ${limitClause}
     `;
 
-        const result = await db.query(query, params);
-        return result.rows;
-    }
+    const result = await db.query(query, params);
+    return result.rows;
+  }
 
-    static async getById(interactionId) {
-        const query = `
+  static async getById(interactionId) {
+    const query = `
       SELECT 
         ei.*,
         e1.ensembl_exon_id as exon1,
@@ -136,9 +150,9 @@ class Interaction {
       WHERE ei.eei_id = $1
     `;
 
-        const result = await db.query(query, [interactionId]);
-        return result.rows[0] || null;
-    }
+    const result = await db.query(query, [interactionId]);
+    return result.rows[0] || null;
+  }
 }
 
 module.exports = Interaction;
