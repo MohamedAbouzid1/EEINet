@@ -89,3 +89,10 @@ LIMIT 10;
 SELECT *
 FROM export_eei_by_method('EPPIC')
 LIMIT 10;
+SELECT column_name,
+    data_type,
+    is_nullable,
+    column_default
+FROM information_schema.columns
+WHERE table_name = 'genes'
+    AND table_schema = 'public';

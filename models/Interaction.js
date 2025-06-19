@@ -137,7 +137,29 @@ class Interaction {
         epa.hydrogen_bonds,
         epa.salt_bridges,
         eea.cs_score,
-        eea.cr_score
+        eea.cr_score,
+        g1.gene_id as gene1_id,
+        g1.gene_symbol as gene1_symbol,
+        g1.gene_name as gene1_name,
+        g1.organism_id as gene1_organism_id,
+        g1.description as gene1_description,
+        g1.chromosome as gene1_chromosome,
+        g1.strand as gene1_strand,
+        g1.gene_start as gene1_start,
+        g1.gene_end as gene1_end,
+        g1.ensembl_gene_id as gene1_ensembl_id,
+        g1.created_at as gene1_created_at,
+        g2.gene_id as gene2_id,
+        g2.gene_symbol as gene2_symbol,
+        g2.gene_name as gene2_name,
+        g2.organism_id as gene2_organism_id,
+        g2.description as gene2_description,
+        g2.chromosome as gene2_chromosome,
+        g2.strand as gene2_strand,
+        g2.gene_start as gene2_start,
+        g2.gene_end as gene2_end,
+        g2.ensembl_gene_id as gene2_ensembl_id,
+        g2.created_at as gene2_created_at
       FROM eei_interactions ei
       JOIN exons e1 ON ei.exon1_id = e1.exon_id
       JOIN exons e2 ON ei.exon2_id = e2.exon_id
@@ -147,6 +169,8 @@ class Interaction {
       LEFT JOIN eei_orthology_mapping eom ON ei.eei_id = eom.eei_id
       LEFT JOIN eei_pisa_attributes epa ON ei.eei_id = epa.eei_id
       LEFT JOIN eei_eppic_attributes eea ON ei.eei_id = eea.eei_id
+      LEFT JOIN genes g1 ON e1.gene_id = g1.gene_id
+      LEFT JOIN genes g2 ON e2.gene_id = g2.gene_id
       WHERE ei.eei_id = $1
     `;
 

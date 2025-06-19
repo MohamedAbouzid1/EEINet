@@ -424,7 +424,7 @@ const HelpPage = () => {
                                                 <Typography variant="body2" color="text.secondary" paragraph>
                                                     Send us your questions or feedback
                                                 </Typography>
-                                                <Button variant="outlined" href="mailto:support@eeinet.org">
+                                                <Button variant="outlined" href="mailto:support@eeinet.com">
                                                     Contact Us
                                                 </Button>
                                             </Box>

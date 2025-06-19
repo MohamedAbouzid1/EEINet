@@ -54,6 +54,11 @@ const searchController = {
             const query = `SELECT * FROM search_eei_interactions($1, $2, $3, $4)`;
             const result = await db.query(query, [searchTerm, type, parseInt(limit), parseInt(offset)]);
 
+            // Get total count of matching results (without limit/offset)
+            const countQuery = `SELECT COUNT(*) FROM search_eei_interactions($1, $2, NULL, NULL)`;
+            const countResult = await db.query(countQuery, [searchTerm, type]);
+            const totalCount = parseInt(countResult.rows[0].count);
+
             // If no results and it's an exact exon search, try alternative approaches
             if (result.rows.length === 0 && type === 'exon') {
                 // Try direct lookup
@@ -83,6 +88,17 @@ const searchController = {
 
                 const directResult = await db.query(directQuery, [searchTerm, parseInt(limit), parseInt(offset)]);
 
+                // Get total count for direct lookup
+                const directCountQuery = `
+                  SELECT COUNT(*)
+                  FROM eei_interactions ei
+                  JOIN exons e1 ON ei.exon1_id = e1.exon_id
+                  JOIN exons e2 ON ei.exon2_id = e2.exon_id
+                  WHERE e1.ensembl_exon_id = $1 OR e2.ensembl_exon_id = $1
+                `;
+                const directCountResult = await db.query(directCountQuery, [searchTerm]);
+                const directTotalCount = parseInt(directCountResult.rows[0].count);
+
                 const response = {
                     success: true,
                     data: {
@@ -94,7 +110,8 @@ const searchController = {
                             limit: parseInt(limit),
                             offset: parseInt(offset),
                             count: directResult.rows.length,
-                            hasMore: directResult.rows.length === parseInt(limit)
+                            total: directTotalCount,
+                            hasMore: (parseInt(offset) + directResult.rows.length) < directTotalCount
                         }
                     }
                 };
@@ -117,7 +134,8 @@ const searchController = {
                         limit: parseInt(limit),
                         offset: parseInt(offset),
                         count: result.rows.length,
-                        hasMore: result.rows.length === parseInt(limit)
+                        total: totalCount,
+                        hasMore: (parseInt(offset) + result.rows.length) < totalCount
                     }
                 }
             };

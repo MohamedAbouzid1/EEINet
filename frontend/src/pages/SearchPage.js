@@ -227,10 +227,16 @@ const SearchPage = () => {
                             <Typography variant="h6" gutterBottom>
                                 Search Results
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Found {searchResults.data.results.length} interactions
-                                {searchResults.data.pagination.hasMore && ' (showing first page)'}
-                            </Typography>
+                            {searchResults.data.pagination && typeof searchResults.data.pagination.total === 'number' && searchResults.data.pagination.total > 0 && (
+                                <Typography variant="body2" color="text.secondary">
+                                    {(() => {
+                                        const total = searchResults.data.pagination.total;
+                                        const from = (page - 1) * limit + 1;
+                                        const to = Math.min(page * limit, total);
+                                        return `Showing ${from}–${to} of ${total} results`;
+                                    })()}
+                                </Typography>
+                            )}
                         </Box>
 
                         <Grid container spacing={2}>
@@ -330,7 +336,10 @@ const SearchPage = () => {
                                                             <Chip label={`PDB: ${result.pdb_id}`} variant="outlined" size="small" />
                                                         )}
                                                         {result.gene1 && (
-                                                            <Chip label={`Gene: ${result.gene1}`} variant="outlined" size="small" />
+                                                            <Chip label={`Gene 1: ${result.gene1}`} variant="outlined" size="small" />
+                                                        )}
+                                                        {result.gene2 && (
+                                                            <Chip label={`Gene 2: ${result.gene2}`} variant="outlined" size="small" />
                                                         )}
                                                     </Box>
                                                     <Button

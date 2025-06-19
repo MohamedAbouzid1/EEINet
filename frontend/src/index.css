@@ -16,7 +16,7 @@ code {
     monospace;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar 
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -34,6 +34,7 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
 }
+  */
 
 /* Selection styling */
 ::selection {

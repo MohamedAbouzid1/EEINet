@@ -431,6 +431,71 @@ const InteractionDetailsPage = () => {
                                 </CardContent>
                             </Card>
                         </Grid>
+
+                        {/* Gene Information */}
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>
+                                        Corresponding Genes
+                                    </Typography>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                                                Gene 1
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Gene symbol: {interaction.gene1_symbol || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Description: {interaction.gene1_description || ''}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Chromosome: {interaction.gene1_chromosome || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Strand: {interaction.gene1_strand || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Start position: {interaction.gene1_start || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                End position: {interaction.gene1_end || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Ensembl ID: {interaction.gene1_ensembl_id || 'N/A'}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                                                Gene 2
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Gene symbol: {interaction.gene2_symbol || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Description: {interaction.gene2_description || ''}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Chromosome: {interaction.gene2_chromosome || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Strand: {interaction.gene2_strand || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Start position: {interaction.gene2_start || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                End position: {interaction.gene2_end || 'N/A'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Ensembl ID: {interaction.gene2_ensembl_id || 'N/A'}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Card>
+                        </Grid>
                     </Grid>
 
                     {/* Detailed Attributes */}

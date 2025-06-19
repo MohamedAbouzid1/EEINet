@@ -101,7 +101,7 @@ const AboutPage = () => {
                                 gutterBottom
                                 sx={{
                                     fontWeight: 700,
-                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+                                    background: 'linear-gradient(90deg, #1976d2 0%, #00afb9 100%)',
                                     backgroundClip: 'text',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',

@@ -140,18 +140,18 @@ const StatisticsPage = () => {
 
                     {/* Method Distribution */}
                     <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
-                        <Grid item xs={12} lg={8}>
+                        <Grid item xs={12} lg={8} style={{ width: '100%' }}>
                             <motion.div
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.6, delay: 0.2 }}
                             >
                                 <Card>
-                                    <CardContent>
+                                    <CardContent sx={{ minHeight: 350 }}>
                                         <Typography variant="h6" gutterBottom>
                                             Interactions by Method
                                         </Typography>
-                                        <ResponsiveContainer width="100%" height={300} minWidth={400}>
+                                        <ResponsiveContainer width="100%" height={300}>
                                             <BarChart data={methodData}>
                                                 <CartesianGrid strokeDasharray="3 3" />
                                                 <XAxis dataKey="method" />
@@ -166,18 +166,18 @@ const StatisticsPage = () => {
                             </motion.div>
                         </Grid>
 
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12} lg={4} style={{ width: '100%' }}>
                             <motion.div
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.6, delay: 0.2 }}
                             >
                                 <Card>
-                                    <CardContent>
+                                    <CardContent sx={{ minHeight: 350 }}>
                                         <Typography variant="h6" gutterBottom>
                                             Method Types
                                         </Typography>
-                                        <ResponsiveContainer width="100%" height={300} minWidth={400}>
+                                        <ResponsiveContainer width="100%" height={300}>
                                             <PieChart>
                                                 <Pie
                                                     data={[
@@ -187,7 +187,7 @@ const StatisticsPage = () => {
                                                     cx="50%"
                                                     cy="50%"
                                                     labelLine={false}
-                                                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                                    label={({ name, value, percent }) => `${name} ${value} (${(percent * 100).toFixed(1)}%)`}
                                                     outerRadius={80}
                                                     fill="#8884d8"
                                                     dataKey="value"
@@ -216,7 +216,7 @@ const StatisticsPage = () => {
                                 <Card>
                                     <CardContent>
                                         <Typography variant="h6" gutterBottom>
-                                            Jaccard Percentage Distribution (Experimental)
+                                            Jaccard Percentage Distribution (contact based networks)
                                         </Typography>
                                         <ResponsiveContainer width="100%" height={300}>
                                             <BarChart data={jaccardData}>
@@ -241,7 +241,7 @@ const StatisticsPage = () => {
                                 <Card>
                                     <CardContent>
                                         <Typography variant="h6" gutterBottom>
-                                            Confidence Distribution (Predicted)
+                                            Confidence Distribution (Predicted networks)
                                         </Typography>
                                         <ResponsiveContainer width="100%" height={300}>
                                             <BarChart data={confidenceDistData}>

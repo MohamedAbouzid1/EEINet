@@ -124,14 +124,14 @@ const HomePage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <Box sx={{ textAlign: 'center', mb: 6 }}>
+                        <Box sx={{ textAlign: 'center', mb: 6, mt: 4 }}>
                             <Typography
                                 variant="h3"
                                 component="h1"
                                 gutterBottom
                                 sx={{
-                                    fontWeight: 700,
-                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+                                    fontWeight: 750,
+                                    background: 'linear-gradient(90deg, #1976d2 0%, #00afb9 100%)',
                                     backgroundClip: 'text',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
@@ -144,8 +144,8 @@ const HomePage = () => {
                                 component="h1"
                                 gutterBottom
                                 sx={{
-                                    fontWeight: 700,
-                                    background: 'linear-gradient(45deg, #1976d2, #42a5f5)',
+                                    fontWeight: 750,
+                                    background: 'linear-gradient(90deg, #1976d2 0%, #00afb9 100%)',
                                     backgroundClip: 'text',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
@@ -179,7 +179,7 @@ const HomePage = () => {
                             >
                                 <TextField
                                     fullWidth
-                                    placeholder="Search exons, proteins, or genes (e.g., ENSE00001126122, 8bzl)"
+                                    placeholder="Search exons, genes, protein complexes, or proteins (e.g., ENSE00001126122)"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     InputProps={{
@@ -205,7 +205,7 @@ const HomePage = () => {
 
                             {/* Quick Search Chips */}
                             <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
-                                {['ENSE00001126122', '8bzl', 'P28072'].map((term) => (
+                                {['ENSE00001126122', 'PSMB6', '8bzl', 'P28072'].map((term) => (
                                     <Chip
                                         key={term}
                                         label={term}
