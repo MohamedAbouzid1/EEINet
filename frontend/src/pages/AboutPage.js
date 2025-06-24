@@ -13,6 +13,7 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
+    Button,
 } from '@mui/material';
 import {
     Science,
@@ -23,6 +24,7 @@ import {
     Storage,
     Timeline,
     ArrowForwardIos,
+    OpenInNew,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -55,23 +57,23 @@ const AboutPage = () => {
     const methods = [
         {
             name: 'Contact-based',
-            type: 'Experimental',
             description: 'Direct structural contact analysis between exons in protein complexes',
+            link: '/methods/contact',
         },
         {
             name: 'PISA-based',
-            type: 'Experimental',
             description: 'Protein Interfaces, Surfaces and Assemblies analysis',
+            link: '/methods/pisa',
         },
         {
             name: 'EPPIC-based',
-            type: 'Experimental',
             description: 'Evolutionary Protein-Protein Interface Classifier in protein complexes',
+            link: '/methods/eppic',
         },
         {
-            name: 'Orthology-based Prediction',
-            type: 'Predicted',
+            name: 'Orthology-based',
             description: 'Orthology mapping for interaction prediction using EGIO',
+            link: '/methods/orthology',
         },
     ];
 
@@ -211,11 +213,16 @@ const AboutPage = () => {
                                                     <Typography variant="h6">
                                                         {method.name}
                                                     </Typography>
-                                                    <Chip
-                                                        label={method.type}
-                                                        color={method.type === 'Experimental' ? 'primary' : 'secondary'}
+                                                    <Button
+                                                        variant="text"
+                                                        startIcon={<OpenInNew />}
+                                                        href={method.link}
+                                                        target="_blank"
                                                         size="small"
-                                                    />
+                                                        color="secondary"
+                                                    >
+                                                        Learn More
+                                                    </Button>
                                                 </Box>
                                                 <Typography variant="body2" color="text.secondary">
                                                     {method.description}
@@ -287,7 +294,7 @@ const AboutPage = () => {
                                             Orthology Data
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
-                                            Mouse-human orthology mappings for prediction validation
+                                            Human-other species orthology mappings for interaction prediction
                                         </Typography>
                                     </Paper>
                                 </Grid>
@@ -309,10 +316,8 @@ const AboutPage = () => {
                                         Development Team
                                     </Typography>
                                     <Typography variant="body1" paragraph>
-                                        The database and website were developed as part of ongoing research in <a href="https://khaliquen.github.io/" target="_blank" rel="noopener noreferrer">NeStOme Lab</a>, Dr. Khalique Newaz at
-                                        the institute for computational systems biology at the University of Hamburg, <a href="https://www.cosy.bio/" target="_blank" rel="noopener noreferrer">Prof. Dr. Jan Baumbach</a>.
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
+                                        The database was developed by Mohamed Abouzid as part of his master's thesis project, carried out under the supervision of Dr. Khalique Newaz in the <a href="https://khaliquen.github.io/" target="_blank" rel="noopener noreferrer">NeStOme Lab</a> at <a href="https://www.cosy.bio/" target="_blank" rel="noopener noreferrer">the institute for computational systems biology</a>, Prof. Dr. Jan Baumbach at the University of Hamburg.                                    </Typography>
+                                    <Typography variant="body1" color="text.secondary">
                                         For questions, suggestions, or collaboration opportunities, please contact us
                                         <Link to="/help"> here</Link>.
                                     </Typography>

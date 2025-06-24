@@ -17,6 +17,11 @@ import StatisticsPage from './pages/StatisticsPage';
 import ExportPage from './pages/ExportPage';
 import AboutPage from './pages/AboutPage';
 import HelpPage from './pages/HelpPage';
+// Detection methods pages
+import ContactMethodPage from './pages/ContactMethodPage';
+import PisaMethodPage from './pages/PisaMethodPage';
+import EppicMethodPage from './pages/EppicMethodPage';
+import OrthologyMethodPage from './pages/OrthologyMethodPage';
 
 // Create theme
 const theme = createTheme({
@@ -247,6 +252,11 @@ function App() {
                 <Route path="/export" element={<ExportPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/help" element={<HelpPage />} />
+                {/* Method explanation pages */}
+                <Route path="/methods/contact" element={<ContactMethodPage />} />
+                <Route path="/methods/pisa" element={<PisaMethodPage />} />
+                <Route path="/methods/eppic" element={<EppicMethodPage />} />
+                <Route path="/methods/orthology" element={<OrthologyMethodPage />} />
               </Routes>
             </Box>
           </Box>

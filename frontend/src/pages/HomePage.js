@@ -113,6 +113,33 @@ const HomePage = () => {
         },
 
     ];
+    // Detection methods with their routes
+    const detectionMethods = [
+        {
+            name: 'Contact-based',
+            route: '/methods/contact',
+            color: '#1976d2',
+            description: 'Direct structural contact analysis'
+        },
+        {
+            name: 'PISA-based',
+            route: '/methods/pisa',
+            color: '#388e3c',
+            description: 'Protein Interfaces, Surfaces and Assemblies'
+        },
+        {
+            name: 'EPPIC-based',
+            route: '/methods/eppic',
+            color: '#f57c00',
+            description: 'Evolutionary Protein-Protein Interface Classifier'
+        },
+        {
+            name: 'Orthology-based Predictions',
+            route: '/methods/orthology',
+            color: '#7b1fa2',
+            description: 'Cross-species orthology mapping'
+        }
+    ];
 
     return (
         <>
@@ -348,18 +375,51 @@ const HomePage = () => {
                                 Detection Methods
                             </Typography>
                             <Typography variant="body1" color="text.secondary" paragraph>
-                                Our database includes EEI data from multiple detection methods:
+                                Learn about the different methods used to detect exon-exon interactions:
                             </Typography>
                             <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-                                {['Contact-based', 'PISA-based', 'EPPIC-based', 'Orthology-based Predictions'].map((method) => (
-                                    <Chip
-                                        key={method}
-                                        label={method}
-                                        variant="outlined"
-                                        size="medium"
-                                    />
+                                {detectionMethods.map((method, index) => (
+                                    <motion.div
+                                        key={method.name}
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.3, delay: 0.1 * index }}
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        <Chip
+                                            label={method.name}
+                                            component={Link}
+                                            to={method.route}
+                                            clickable
+                                            sx={{
+                                                fontSize: '1rem',
+                                                height: 'auto',
+                                                py: 1.5,
+                                                px: 2,
+                                                backgroundColor: `${method.color}15`,
+                                                color: method.color,
+                                                border: `2px solid ${method.color}30`,
+                                                fontWeight: 600,
+                                                textDecoration: 'none',
+                                                transition: 'all 0.3s ease',
+                                                '&:hover': {
+                                                    backgroundColor: `${method.color}25`,
+                                                    borderColor: method.color,
+                                                    transform: 'translateY(-2px)',
+                                                    boxShadow: `0 4px 12px ${method.color}40`
+                                                },
+                                                '&:active': {
+                                                    transform: 'translateY(0px)',
+                                                }
+                                            }}
+                                        />
+                                    </motion.div>
                                 ))}
                             </Box>
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                                Click on any method to learn more about how it works
+                            </Typography>
                         </Box>
                     </motion.div>
                 </Box>
