@@ -13,6 +13,9 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Set the homepage for React Router
+ENV PUBLIC_URL=/eeinet
+
 # Build the application
 RUN npm run build
 
@@ -24,6 +27,10 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built app from build stage
 COPY --from=build /app/build /usr/share/nginx/html
+
+# Create the /eeinet directory and copy files there too
+RUN mkdir -p /usr/share/nginx/html/eeinet
+RUN cp -r /usr/share/nginx/html/* /usr/share/nginx/html/eeinet/ 2>/dev/null || true
 
 # Add non-root user
 RUN addgroup -g 1001 -S nginx_user

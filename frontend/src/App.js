@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline, Box } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -257,6 +257,9 @@ function App() {
                 <Route path="/methods/pisa" element={<PisaMethodPage />} />
                 <Route path="/methods/eppic" element={<EppicMethodPage />} />
                 <Route path="/methods/orthology" element={<OrthologyMethodPage />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="" element={<Navigate to="/" replace />} />
+
               </Routes>
             </Box>
           </Box>

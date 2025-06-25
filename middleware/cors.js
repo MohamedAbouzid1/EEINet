@@ -10,7 +10,9 @@ const corsOptions = {
             'http://localhost:3000',
             'http://localhost:3001',
             'http://localhost:8080',
-            // Add production domains here
+            'http://localhost:8221',
+            'https://prototypes.cosy.bio',
+            'http://prototypes.cosy.bio',
         ];
 
         if (allowedOrigins.indexOf(origin) !== -1) {

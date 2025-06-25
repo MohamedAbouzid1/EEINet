@@ -18,6 +18,9 @@ const apiRoutes = require('./routes/api');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.set('trust proxy', true); // trust nginx proxy
+
+
 // SECURITY MIDDLEWARE
 app.use(helmet({
     contentSecurityPolicy: {
