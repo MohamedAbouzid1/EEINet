@@ -69,5 +69,5 @@
     "@types/cytoscape": "^3.21.9",
     "@types/lodash": "^4.17.17"
   },
-  "homepage": "/eeinet/"
+  "homepage": "/eeinet"
 }
