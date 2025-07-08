@@ -16,12 +16,13 @@ const exonController = {
             }
 
             const { exon_id } = req.params;
+            // Exon.findById already supports both numeric and Ensembl exon_id
             const exon = await Exon.findById(exon_id);
 
             if (!exon) {
                 return res.status(StatusCodes.NOT_FOUND).json({
                     success: false,
-                    message: 'Exon not found'
+                    message: `Exon not found for id or Ensembl id: ${exon_id}`
                 });
             }
 

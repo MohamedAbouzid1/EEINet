@@ -82,7 +82,7 @@ const HomePage = () => {
             gradient: 'linear-gradient(45deg, #1976d2, #64b5f6)',
         },
         {
-            title: 'Experimental EEIs',
+            title: 'Multi-Method EEIs',
             value: stats?.data?.experimental_eeis || 72352,
             icon: <FontAwesomeIcon icon={faAtom} size="lg" />,
             color: '#388e3c',
@@ -104,11 +104,11 @@ const HomePage = () => {
 
         },
         {
-            title: 'Unique PDB IDs',
+            title: 'Unique PDB Structures',
             value: stats?.data?.unique_pdb_structures || 3166,
             icon: <FontAwesomeIcon icon={faFingerprint} size="lg" />,
             color: '#9d0208',
-            gradient: 'linear-gradient(#9d0208, #9d0208, #d00000)',
+            gradient: 'linear-gradient(45deg, #9d0208, #d00000)',
 
         },
 
@@ -134,7 +134,7 @@ const HomePage = () => {
             description: 'Evolutionary Protein-Protein Interface Classifier'
         },
         {
-            name: 'Orthology-based Predictions',
+            name: 'Orthology-based Detection',
             route: '/methods/orthology',
             color: '#7b1fa2',
             description: 'Cross-species orthology mapping'
@@ -206,7 +206,7 @@ const HomePage = () => {
                             >
                                 <TextField
                                     fullWidth
-                                    placeholder="Search exons, genes, protein complexes, or proteins (e.g., ENSE00001126122)"
+                                    placeholder="Search exons, genes, or proteins (e.g., ENSE00001126122)"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     InputProps={{
@@ -232,7 +232,7 @@ const HomePage = () => {
 
                             {/* Quick Search Chips */}
                             <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
-                                {['ENSE00001126122', 'PSMB6', '8bzl', 'P28072'].map((term) => (
+                                {['ENSE00001126122', 'PSMB6', 'P28072'].map((term) => (
                                     <Chip
                                         key={term}
                                         label={term}

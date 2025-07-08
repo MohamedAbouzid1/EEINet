@@ -34,23 +34,23 @@ const AboutPage = () => {
     const features = [
         {
             icon: <Science />,
-            title: 'Experimental Data',
-            description: 'Experimental human exon-exon interactions from structural protein complexes',
+            title: 'Structural Data',
+            description: 'Human exon-exon interactions derived from three-dimensional protein complex structures',
         },
         {
             icon: <Biotech />,
-            title: 'Predicted Interactions',
-            description: 'Computationally predicted interactions using orthology mapping',
+            title: 'Orthology-Based Analysis',
+            description: 'Computationally identified interactions using systematic orthology mapping',
         },
         {
             icon: <DataObject />,
-            title: 'Multiple Methods',
-            description: 'Contact-based, PISA, EPPIC detection methods for comprehensive coverage',
+            title: 'Multiple Detection Methods',
+            description: 'Contact-based, PISA, and EPPIC computational methods for comprehensive coverage',
         },
         {
             icon: <Storage />,
             title: 'Comprehensive Database',
-            description: 'Extensive collection of human exon-exon interaction data',
+            description: 'Extensive collection of systematically identified human exon-exon interactions',
         },
     ];
 
@@ -58,22 +58,22 @@ const AboutPage = () => {
         {
             name: 'Contact-based',
             description: 'Direct structural contact analysis between exons in protein complexes',
-            link: '/methods/contact',
+            link: 'https://prototypes.cosy.bio/eeinet/methods/contact',
         },
         {
             name: 'PISA-based',
             description: 'Protein Interfaces, Surfaces and Assemblies analysis',
-            link: '/methods/pisa',
+            link: 'https://prototypes.cosy.bio/eeinet/methods/pisa',
         },
         {
             name: 'EPPIC-based',
             description: 'Evolutionary Protein-Protein Interface Classifier in protein complexes',
-            link: '/methods/eppic',
+            link: 'https://prototypes.cosy.bio/eeinet/methods/eppic',
         },
         {
             name: 'Orthology-based',
             description: 'Orthology mapping for interaction prediction using EGIO',
-            link: '/methods/orthology',
+            link: 'https://prototypes.cosy.bio/eeinet/methods/orthology',
         },
     ];
 
@@ -133,15 +133,10 @@ const AboutPage = () => {
                                         What is EEI Network?
                                     </Typography>
                                     <Typography variant="body1" paragraph>
-                                        The Exon-Exon Interaction (EEI) Network Database is a specialized resource that catalogs
-                                        and analyzes interactions between protein exons. These interactions represent functional
-                                        relationships where exons from different genes encode protein segments that physically
-                                        interact in three-dimensional space.
+                                        The Exon-Exon Interaction (EEI) Network Database is a specialized resource that catalogs and analyzes interactions between protein exons. These interactions represent functional relationships where exons from different genes encode protein segments that physically interact in three-dimensional space.
                                     </Typography>
                                     <Typography variant="body1" paragraph>
-                                        Our database combines experimental structural data with computational predictions to provide
-                                        a comprehensive view of the exon interaction landscape in human proteins. This resource is
-                                        valuable for understanding protein function, evolution, and the impact of genetic variations.
+                                        Our database integrates structural data from protein complexes with computational orthology analysis to provide a comprehensive view of the exon interaction landscape in human proteins. This resource is valuable for understanding protein function, evolution, and the impact of genetic variations.
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -275,7 +270,7 @@ const AboutPage = () => {
                                     </Typography>
                                     <Paper sx={{ p: 2, mb: 2 }}>
                                         <Typography variant="subtitle2" gutterBottom>
-                                            Experimental Data
+                                            Structural Data
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
                                             Derived from high-resolution protein structures in the Protein Data Bank (PDB)
@@ -316,7 +311,8 @@ const AboutPage = () => {
                                         Development Team
                                     </Typography>
                                     <Typography variant="body1" paragraph>
-                                        The database was developed by Mohamed Abouzid as part of his master's thesis project, carried out under the supervision of Dr. Khalique Newaz in the <a href="https://khaliquen.github.io/" target="_blank" rel="noopener noreferrer">NeStOme Lab</a> at <a href="https://www.cosy.bio/" target="_blank" rel="noopener noreferrer">the institute for computational systems biology</a>, Prof. Dr. Jan Baumbach at the University of Hamburg.                                    </Typography>
+                                        The database was developed by Mohamed Abouzid as part of his master's thesis project, carried out under the supervision of Dr. Khalique Newaz in the <a href="https://khaliquen.github.io/" target="_blank" rel="noopener noreferrer">NeStOme Lab</a> at the <a href="https://www.cosy.bio/" target="_blank" rel="noopener noreferrer">Institute for Computational Systems Biology</a>, under Prof. Dr. Jan Baumbach at the University of Hamburg.
+                                    </Typography>
                                     <Typography variant="body1" color="text.secondary">
                                         For questions, suggestions, or collaboration opportunities, please contact us
                                         <Link to="/help"> here</Link>.

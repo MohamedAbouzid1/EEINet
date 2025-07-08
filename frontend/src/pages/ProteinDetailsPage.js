@@ -119,14 +119,6 @@ const ProteinDetailsPage = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Typography variant="body2" color="text.secondary">
-                                                Gene Name:
-                                            </Typography>
-                                            <Typography variant="body2">
-                                                {protein?.gene_name || 'N/A'}
-                                            </Typography>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Typography variant="body2" color="text.secondary">
                                                 Organism:
                                             </Typography>
                                             <Typography variant="body2">
@@ -162,8 +154,6 @@ const ProteinDetailsPage = () => {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell>Exon ID</TableCell>
-                                                        <TableCell>Chromosome</TableCell>
-                                                        <TableCell>Position</TableCell>
                                                         <TableCell>Length</TableCell>
                                                         <TableCell>Interactions</TableCell>
                                                         <TableCell>Actions</TableCell>
@@ -180,13 +170,6 @@ const ProteinDetailsPage = () => {
                                                                 >
                                                                     {exon.ensembl_exon_id}
                                                                 </Button>
-                                                            </TableCell>
-                                                            <TableCell>{exon.chromosome || 'N/A'}</TableCell>
-                                                            <TableCell>
-                                                                {exon.exon_start && exon.exon_end
-                                                                    ? `${exon.exon_start.toLocaleString()}-${exon.exon_end.toLocaleString()}`
-                                                                    : 'N/A'
-                                                                }
                                                             </TableCell>
                                                             <TableCell>
                                                                 {exon.exon_length ? `${exon.exon_length} bp` : 'N/A'}
@@ -236,8 +219,6 @@ const ProteinDetailsPage = () => {
                                                         <TableCell>Exons</TableCell>
                                                         <TableCell>Partner Protein</TableCell>
                                                         <TableCell>Method</TableCell>
-                                                        <TableCell>Jaccard %</TableCell>
-                                                        <TableCell>Confidence</TableCell>
                                                         <TableCell>Actions</TableCell>
                                                     </TableRow>
                                                 </TableHead>
@@ -281,12 +262,6 @@ const ProteinDetailsPage = () => {
                                                                         size="small"
                                                                         color={interaction.method_type === 'experimental' ? 'primary' : 'secondary'}
                                                                     />
-                                                                </TableCell>
-                                                                <TableCell>
-                                                                    {interaction.jaccard_percent ? `${interaction.jaccard_percent}%` : 'N/A'}
-                                                                </TableCell>
-                                                                <TableCell>
-                                                                    {interaction.confidence ? `${(interaction.confidence * 100).toFixed(1)}%` : 'N/A'}
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <Button

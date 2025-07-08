@@ -384,7 +384,7 @@ const SearchPage = () => {
                             <Typography variant="body2" color="text.secondary">
                                 Try searching for:
                             </Typography>
-                            {['ENSE00001126122', 'TP53', 'BRCA1', 'P53'].map((term) => (
+                            {['ENSE00001126122', 'PSMB6', 'P28072'].map((term) => (
                                 <Chip
                                     key={term}
                                     label={term}
