@@ -35,7 +35,7 @@ const AboutPage = () => {
         {
             icon: <Science />,
             title: 'Structural Data',
-            description: 'Human exon-exon interactions derived from three-dimensional protein complex structures',
+            description: 'Human exon-exon interactions derived from 3D protein complex structures',
         },
         {
             icon: <Biotech />,
@@ -50,7 +50,7 @@ const AboutPage = () => {
         {
             icon: <Storage />,
             title: 'Comprehensive Database',
-            description: 'Extensive collection of systematically identified human exon-exon interactions',
+            description: 'Extensive collection of systematically identified exon-exon interactions',
         },
     ];
 
@@ -289,7 +289,7 @@ const AboutPage = () => {
                                             Orthology Data
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
-                                            Human-other species orthology mappings for interaction prediction
+                                            Human-other species orthology mappings for orthology-based interactions
                                         </Typography>
                                     </Paper>
                                 </Grid>

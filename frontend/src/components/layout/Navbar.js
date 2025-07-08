@@ -32,10 +32,10 @@ const Navbar = () => {
 
     const menuItems = [
         { text: 'Home', path: '/', icon: <Home /> },
-        { text: 'About', path: '/about', icon: <Info /> },
         { text: 'Search', path: '/search', icon: <Search /> },
         { text: 'Statistics', path: '/statistics', icon: <BarChart /> },
         { text: 'Export', path: '/export', icon: <FileDownload /> },
+        { text: 'About', path: '/about', icon: <Info /> },
         { text: 'Help', path: '/help', icon: <Help /> },
     ];
 

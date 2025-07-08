@@ -25,7 +25,7 @@ const FooterComponent = () => {
                         </div>
                         <div style={{ marginRight: '20px' }}>
                             <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase text-center">
-                                Impressum
+                                Imprint
                             </h2>
 
                             <p>Prof. Dr. Jan Baumbach</p>
