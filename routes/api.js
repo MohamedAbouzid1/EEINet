@@ -10,6 +10,7 @@ const interactionController = require('../controllers/interactionController');
 const statsController = require('../controllers/statsController');
 const exportController = require('../controllers/exportController');
 const searchController = require('../controllers/searchController');
+const networkController = require('../controllers/networkController');
 
 // Validation middleware
 const validateExonId = [
@@ -284,5 +285,38 @@ router.get('/debug/test-search/:exon_id',
     }
   }
 );
+
+// NETWORK ROUTES
+router.get('/network/gene/:gene_symbol',
+  param('gene_symbol').notEmpty().withMessage('Gene symbol is required'),
+  validatePagination,
+  query('method_filter').optional().isIn(['Contact', 'PISA', 'EPPIC', 'predicted_contact', 'predicted_PISA', 'predicted_EPPIC']).withMessage('Invalid method filter'),
+  query('min_confidence').optional().isFloat({ min: 0, max: 1 }).withMessage('min_confidence must be between 0 and 1'),
+  query('min_jaccard').optional().isFloat({ min: 0, max: 100 }).withMessage('min_jaccard must be between 0 and 100'),
+  query('max_interactions').optional().isInt({ min: 10, max: 1000 }).withMessage('max_interactions must be between 10 and 1000'),
+  networkController.getGeneNetwork
+);
+
+router.get('/network/protein/:protein_id',
+  param('protein_id').notEmpty().withMessage('Protein ID is required'),
+  validatePagination,
+  query('method_filter').optional().isIn(['Contact', 'PISA', 'EPPIC', 'predicted_contact', 'predicted_PISA', 'predicted_EPPIC']).withMessage('Invalid method filter'),
+  query('min_confidence').optional().isFloat({ min: 0, max: 1 }).withMessage('min_confidence must be between 0 and 1'),
+  query('min_jaccard').optional().isFloat({ min: 0, max: 100 }).withMessage('min_jaccard must be between 0 and 100'),
+  networkController.getProteinNetwork
+);
+
+router.get('/network/interactions/subgraph',
+  query('genes').optional().isString().withMessage('genes must be a comma-separated string'),
+  query('proteins').optional().isString().withMessage('proteins must be a comma-separated string'),
+  query('exons').optional().isString().withMessage('exons must be a comma-separated string'),
+  query('method_filter').optional().isIn(['Contact', 'PISA', 'EPPIC', 'predicted_contact', 'predicted_PISA', 'predicted_EPPIC']).withMessage('Invalid method filter'),
+  query('min_confidence').optional().isFloat({ min: 0, max: 1 }).withMessage('min_confidence must be between 0 and 1'),
+  query('min_jaccard').optional().isFloat({ min: 0, max: 100 }).withMessage('min_jaccard must be between 0 and 100'),
+  query('max_interactions').optional().isInt({ min: 10, max: 1000 }).withMessage('max_interactions must be between 10 and 1000'),
+  networkController.getInteractionSubgraph
+);
+
+router.get('/network/stats', networkController.getNetworkStats);
 
 module.exports = router;

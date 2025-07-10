@@ -231,7 +231,10 @@ const HomePage = () => {
                             </Paper>
 
                             {/* Quick Search Chips */}
-                            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
+                            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+                                <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
+                                    Try searching for:
+                                </Typography>
                                 {['ENSE00001126122', 'PSMB6', 'P28072'].map((term) => (
                                     <Chip
                                         key={term}

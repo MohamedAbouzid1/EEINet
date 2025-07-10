@@ -26,7 +26,6 @@ import {
     Pie,
     Cell,
 } from 'recharts';
-import FooterComponent from '../components/layout/Footer';
 const COLORS = ['#1976d2', '#388e3c', '#f57c00', '#7b1fa2', '#d32f2f', '#00796b'];
 
 const StatisticsPage = () => {
@@ -107,8 +106,8 @@ const StatisticsPage = () => {
                     <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
                         {[
                             { title: 'Total Interactions', value: summary.total_eei_interactions, color: '#1976d2' },
-                            { title: 'Experimental EEIs', value: summary.experimental_eeis, color: '#388e3c' },
-                            { title: 'Predicted EEIs', value: summary.predicted_eeis, color: '#f57c00' },
+                            { title: 'Structure-based EEIs', value: summary.experimental_eeis, color: '#388e3c' },
+                            { title: 'Orthology-based EEIs', value: summary.predicted_eeis, color: '#f57c00' },
                             { title: 'Unique Exons', value: summary.unique_exons, color: '#7b1fa2' },
                             { title: 'Unique Proteins', value: summary.unique_proteins, color: '#d32f2f' },
                             { title: 'PDB Structures', value: summary.unique_pdb_structures, color: '#00796b' },
@@ -241,7 +240,7 @@ const StatisticsPage = () => {
                                 <Card>
                                     <CardContent>
                                         <Typography variant="h6" gutterBottom>
-                                            Confidence Distribution (Predicted networks)
+                                            Confidence Distribution (Orthology-based networks)
                                         </Typography>
                                         <ResponsiveContainer width="100%" height={300}>
                                             <BarChart data={confidenceDistData}>
@@ -270,7 +269,7 @@ const StatisticsPage = () => {
                                     <Card>
                                         <CardContent>
                                             <Typography variant="h6" gutterBottom>
-                                                Prediction Confidence Statistics
+                                                Orthology-based Confidence Statistics
                                             </Typography>
                                             <Grid container spacing={3}>
                                                 {confidence.map((method, index) => (

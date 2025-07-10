@@ -54,6 +54,18 @@ const ExportPage = () => {
             }
             delete params.export_all; // Remove from params as it's not a backend parameter
 
+            // Adjust type/method for orthology-based (predicted) selection
+            if (params.type === 'predicted') {
+                // If a specific method is selected, use it; otherwise, fetch all predicted interactions
+                if (params.method && params.method !== 'All Methods') {
+                    // Use the selected method for predicted interactions
+                    // (Assumes backend supports filtering predicted by method)
+                } else {
+                    // Remove method to fetch all predicted interactions
+                    delete params.method;
+                }
+            }
+
             const response = await exportAPI.exportInteractions(params);
 
             // Create download link
@@ -97,27 +109,14 @@ const ExportPage = () => {
         { value: 'Contact', label: 'Contact-based' },
         { value: 'PISA', label: 'PISA' },
         { value: 'EPPIC', label: 'EPPIC' },
-        { value: 'predicted_contact', label: 'Predicted Contact' },
-        { value: 'predicted_PISA', label: 'Predicted PISA' },
-        { value: 'predicted_EPPIC', label: 'Predicted EPPIC' },
     ];
 
     // Filter method options based on interaction type
     const getFilteredMethodOptions = () => {
         if (exportConfig.type === 'experimental') {
-            return methodOptions.filter(option =>
-                option.value === 'All Methods' ||
-                option.value === 'Contact' ||
-                option.value === 'PISA' ||
-                option.value === 'EPPIC'
-            );
+            return methodOptions;
         } else if (exportConfig.type === 'predicted') {
-            return methodOptions.filter(option =>
-                option.value === 'All Methods' ||
-                option.value === 'predicted_contact' ||
-                option.value === 'predicted_PISA' ||
-                option.value === 'predicted_EPPIC'
-            );
+            return methodOptions;
         }
         return methodOptions; // Show all options when "All" is selected
     };
@@ -158,8 +157,8 @@ const ExportPage = () => {
                                                     sx={{ minHeight: '56px', minWidth: '150px' }}
                                                 >
                                                     <MenuItem value="All">All</MenuItem>
-                                                    <MenuItem value="experimental">Experimental Interactions</MenuItem>
-                                                    <MenuItem value="predicted">Predicted Interactions</MenuItem>
+                                                    <MenuItem value="experimental">Structure-based Interactions</MenuItem>
+                                                    <MenuItem value="predicted">Orthology-based Interactions</MenuItem>
                                                 </Select>
                                             </FormControl>
                                         </Grid>
@@ -279,7 +278,7 @@ const ExportPage = () => {
                                         Choose your export options carefully:
                                     </Typography>
                                     <Typography variant="body2" component="ul" sx={{ pl: 2 }}>
-                                        <li>Select the data type (experimental or predicted interactions)</li>
+                                        <li>Select the data type (Structure-based or Orthology-based interactions)</li>
                                         <li>Filter by specific methods if needed</li>
                                         <li>Choose your preferred export format</li>
                                         <li>Check "Export All Records" to get complete datasets</li>

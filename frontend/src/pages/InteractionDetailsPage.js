@@ -604,10 +604,10 @@ const InteractionDetailsPage = () => {
                                     {/* Basic method info if no specific attributes */}
                                     {!interaction.free_energy && !interaction.buried_area &&
                                         !interaction.cs_score && !interaction.cr_score && (
-                                            <Alert severity="info">
-                                                This {interaction.method_name} interaction was detected using {interaction.method_type} methods.
+                                            <Typography variant="body2" paragraph color="text.secondary">
+                                                This interaction was detected using {interaction.method_name} based method.
                                                 {interaction.jaccard_percent && ` Jaccard similarity: ${interaction.jaccard_percent}%`}
-                                            </Alert>
+                                            </Typography>
                                         )}
                                 </Box>
                             )}

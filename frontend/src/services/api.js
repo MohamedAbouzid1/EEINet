@@ -83,5 +83,32 @@ export const exportAPI = {
             responseType: params.format === 'json' ? 'json' : 'blob'
         }),
 };
+export const networkAPI = {
+    // Get network for a specific gene
+    getGeneNetwork: (geneSymbol, params = {}) =>
+        api.get(`/network/gene/${geneSymbol}`, { params }),
+
+    // Get network for a specific protein
+    getProteinNetwork: (proteinId, params = {}) =>
+        api.get(`/network/protein/${proteinId}`, { params }),
+
+    // Get subgraph based on multiple genes/proteins/exons
+    getInteractionSubgraph: (params = {}) =>
+        api.get('/network/interactions/subgraph', { params }),
+
+    // Get general network statistics
+    getNetworkStats: () => api.get('/network/stats'),
+
+    // Enhanced search specifically for network building
+    searchForNetwork: (query, type = 'any', limit = 200) =>
+        api.get('/search', {
+            params: {
+                q: query,
+                type,
+                limit,
+                offset: 0
+            }
+        }),
+};
 
 export default api;

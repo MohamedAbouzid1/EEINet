@@ -37,6 +37,7 @@ const Navbar = () => {
         { text: 'Export', path: '/export', icon: <FileDownload /> },
         { text: 'About', path: '/about', icon: <Info /> },
         { text: 'Help', path: '/help', icon: <Help /> },
+        { text: 'Network', path: '/network' },
     ];
 
     const handleDrawerToggle = () => {
