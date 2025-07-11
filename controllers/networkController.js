@@ -125,38 +125,38 @@ const networkController = {
 
             // Build WHERE conditions
             if (geneList.length > 0) {
-                const genePlaceholders = geneList.map(() => `${paramIndex++}`).join(',');
+                const genePlaceholders = geneList.map(() => `$${paramIndex++}`).join(',');
                 whereConditions.push(`(g1.gene_symbol IN (${genePlaceholders}) OR g2.gene_symbol IN (${genePlaceholders}))`);
                 params.push(...geneList, ...geneList);
             }
 
             if (proteinList.length > 0) {
-                const proteinPlaceholders = proteinList.map(() => `${paramIndex++}`).join(',');
+                const proteinPlaceholders = proteinList.map(() => `$${paramIndex++}`).join(',');
                 whereConditions.push(`(p1.uniprot_id IN (${proteinPlaceholders}) OR p2.uniprot_id IN (${proteinPlaceholders}))`);
                 params.push(...proteinList, ...proteinList);
             }
 
             if (exonList.length > 0) {
-                const exonPlaceholders = exonList.map(() => `${paramIndex++}`).join(',');
+                const exonPlaceholders = exonList.map(() => `$${paramIndex++}`).join(',');
                 whereConditions.push(`(e1.ensembl_exon_id IN (${exonPlaceholders}) OR e2.ensembl_exon_id IN (${exonPlaceholders}))`);
                 params.push(...exonList, ...exonList);
             }
 
             // Add method filter
             if (method_filter) {
-                whereConditions.push(`em.method_name = ${paramIndex++}`);
+                whereConditions.push(`em.method_name = $${paramIndex++}`);
                 params.push(method_filter);
             }
 
             // Add confidence filter
             if (min_confidence > 0) {
-                whereConditions.push(`(eom.confidence IS NULL OR eom.confidence >= ${paramIndex++})`);
+                whereConditions.push(`(eom.confidence IS NULL OR eom.confidence >= $${paramIndex++})`);
                 params.push(min_confidence);
             }
 
             // Add jaccard filter
             if (min_jaccard > 0) {
-                whereConditions.push(`(ei.jaccard_percent IS NULL OR ei.jaccard_percent >= ${paramIndex++})`);
+                whereConditions.push(`(ei.jaccard_percent IS NULL OR ei.jaccard_percent >= $${paramIndex++})`);
                 params.push(min_jaccard);
             }
 
@@ -192,7 +192,7 @@ const networkController = {
                 ORDER BY 
                     CASE WHEN eom.confidence IS NOT NULL THEN eom.confidence ELSE 1.0 END DESC,
                     ei.jaccard_percent DESC NULLS LAST
-                LIMIT ${paramIndex}
+                LIMIT $${paramIndex}
             `;
 
             params.push(parseInt(max_interactions));

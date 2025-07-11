@@ -13,7 +13,6 @@ import ExonDetailsPage from './pages/ExonDetailsPage';
 import ProteinDetailsPage from './pages/ProteinDetailsPage';
 import InteractionDetailsPage from './pages/InteractionDetailsPage';
 import StatisticsPage from './pages/StatisticsPage';
-import NetworkVisualizationPage from './pages/NetworkVisualizationPage';
 import ExportPage from './pages/ExportPage';
 import AboutPage from './pages/AboutPage';
 import HelpPage from './pages/HelpPage';
@@ -256,7 +255,6 @@ function App() {
                 <Route path="/protein/:proteinId" element={<ProteinDetailsPage />} />
                 <Route path="/interaction/:interactionId" element={<InteractionDetailsPage />} />
                 <Route path="/statistics" element={<StatisticsPage />} />
-                <Route path="/network" element={<NetworkVisualizationPage />} />
                 <Route path="/export" element={<ExportPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/help" element={<HelpPage />} />
