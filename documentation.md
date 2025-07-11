@@ -14,7 +14,7 @@
 
 ## Overview
 
-EEINet is a comprehensive web application and API for exploring human exon-exon interactions (EEIs) based on protein complex structures. The platform integrates structural data from protein complexes with computational orthology analysis to provide insights into functional relationships between protein exons.
+EEINet is a comprehensive web application and API for exploring human exon-exon interactions (EEIs) based on protein complex structures. The platform integrates structural data from protein complexes with computational analysis to provide insights into functional relationships between protein exons.
 
 ### Key Features
 
@@ -22,7 +22,6 @@ EEINet is a comprehensive web application and API for exploring human exon-exon 
 - **Multiple Detection Methods**: Contact-based, PISA, EPPIC, and orthology-based predictions
 - **Interactive Web Interface**: Modern React-based frontend with advanced search and visualization
 - **RESTful API**: Complete API for programmatic access to interaction data
-- **Network Visualization**: Interactive network graphs for exploring interaction patterns
 - **Data Export**: Multiple format support (JSON, CSV, TSV) with filtering options
 
 ### Technology Stack
@@ -36,7 +35,6 @@ EEINet is a comprehensive web application and API for exploring human exon-exon 
 **Frontend:**
 - React 19 with TypeScript
 - Material-UI (MUI) for components
-- Cytoscape.js for network visualization
 - React Query for state management
 - Framer Motion for animations
 
@@ -71,7 +69,7 @@ EEINet is a comprehensive web application and API for exploring human exon-exon 
 
 The database follows a normalized relational design with the following core entities:
 
-- **Organisms**: Species information (Human, Mouse)
+- **Organisms**: Species information (e.g. Human, Mouse)
 - **Genes**: Gene information with genomic coordinates
 - **Exons**: Exon details with Ensembl identifiers
 - **Proteins**: UniProt protein information
