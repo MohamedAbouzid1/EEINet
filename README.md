@@ -1,4 +1,4 @@
-# EEINet: Exon-Exon Interactions Database
+# EEINet: The Exon-Exon Interactions Database
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
@@ -14,9 +14,9 @@ This tool serves as a valuable resource for researchers studying protein interac
 ### Key Features
 
 - **🔍 Comprehensive Database**: Over 72,000 exon-exon interactions from multiple detection methods
-- **🧬 Multiple Detection Methods**: Contact-based, PISA, EPPIC, and orthology-based predictions
+- **🧬 Multiple Detection Methods**: Contact-based, PISA, EPPIC, and Orthology-based predictions
 - **💻 Interactive Web Interface**: Modern React-based frontend with advanced search and visualization
-- **🚀 RESTful API**: Complete API for programmatic access to interaction data
+- **⏩ RESTful API**: Complete API for programmatic access to interaction data
 - **📊 Data Export**: Multiple format support (JSON, CSV, TSV) with filtering options
 - **⚡ Performance Optimized**: Rate limiting, caching, and efficient pagination
 - **🔒 Secure**: Input validation, SQL injection prevention, and security headers
@@ -28,7 +28,6 @@ This tool serves as a valuable resource for researchers studying protein interac
 - **PostgreSQL** 15+ database
 - **Express middleware**: CORS, rate limiting, compression, helmet security
 - **Data validation** with express-validator
-- **Testing** with Jest and Supertest
 
 ### Frontend
 - **React 19** with TypeScript
@@ -128,7 +127,7 @@ CORS_ORIGINS=http://localhost:3000,http://localhost:8221
 
 ### Base URLs
 - **Development**: `http://localhost:5000/api`
-- **Production**: `https://prototypes.cosy.bio/eeinet/api`
+- **Production**: `https://apps.cosy.bio/eeinet/api`
 
 ### Rate Limiting
 - **General API**: 100 requests per 15 minutes
@@ -179,7 +178,7 @@ Export interaction data in various formats.
 
 The database follows a normalized relational design with the following core entities:
 
-- **Organisms**: Species information (Human, Mouse)
+- **Organisms**: Species information (Human, Mouse, etc.)
 - **Genes**: Gene information with genomic coordinates
 - **Exons**: Exon details with Ensembl identifiers
 - **Proteins**: UniProt protein information
@@ -250,8 +249,8 @@ The project follows best practices for:
 ## Production Deployment
 
 ### Live Application
-- **Frontend**: https://prototypes.cosy.bio/eeinet
-- **API**: https://prototypes.cosy.bio/eeinet/api
+- **Frontend**: https://apps.cosy.bio/eeinet
+- **API**: https://apps.cosy.bio/eeinet/api
 
 ### Docker Compose
 The application is containerized with:
@@ -298,7 +297,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 If you use EEINet in your research, please cite:
 
 ```
-[Citation information to be added]
+
 ```
 
 ## Support
@@ -315,7 +314,7 @@ If you use EEINet in your research, please cite:
 
 ## Acknowledgments
 
-This project is developed at the University of Hamburg, Institute for Computational Systems Biology, under the supervision of Dr. Khalique Newaz in the NeStOme Lab.
+This project is developed at the University of Hamburg, Institute for Computational Systems Biology, under the supervision of Prof. Dr. Jan Baumbach and Dr. Khalique Newaz.
 
 ---
 
