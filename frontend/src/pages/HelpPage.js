@@ -316,7 +316,7 @@ const HelpPage = () => {
                                     </Typography>
                                     <Paper sx={{ p: 2, mb: 2, backgroundColor: 'grey.100' }}>
                                         <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                                            http://localhost:5000/api
+                                            http://apps.cosy.bio/eeinet/api
                                         </Typography>
                                     </Paper>
                                     <Typography variant="subtitle2" gutterBottom>

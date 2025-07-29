@@ -18,7 +18,7 @@ import {
     BarChart,
 } from '@mui/icons-material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDna, faVial, faCalculator, faSearch, faHexagonNodes, faFileExport, faFingerprint } from '@fortawesome/free-solid-svg-icons';
+import { faDna, faVial, faCalculator, faSearch, faFileExport, faFingerprint } from '@fortawesome/free-solid-svg-icons';
 import { faAtom } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -49,13 +49,6 @@ const HomePage = () => {
             description: 'Search exon, protein, or gene across species',
             link: '/search',
             color: '#1976d2',
-        },
-        {
-            icon: <FontAwesomeIcon icon={faHexagonNodes} size="lg" />,
-            title: 'Network Visualization',
-            description: 'Interactive visualization of exon-exon interaction networks',
-            link: '/network',
-            color: '#388e3c',
         },
         {
             icon: <BarChart />,
