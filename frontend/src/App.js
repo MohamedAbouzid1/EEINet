@@ -22,13 +22,6 @@ import PisaMethodPage from './pages/PisaMethodPage';
 import EppicMethodPage from './pages/EppicMethodPage';
 import OrthologyMethodPage from './pages/OrthologyMethodPage';
 
-const getBasename = () => {
-  const path = window.location.pathname;
-  if (path.startsWith('/eeinet')) {
-    return '/eeinet';
-  }
-  return '';
-};
 
 // Create theme
 const theme = createTheme({
@@ -244,7 +237,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Router basename={getBasename()}>
+        <Router basename="/eeinet">
           <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Navbar />
             <Box component="main" sx={{ flexGrow: 1, mt: 8 }}>
@@ -264,13 +257,11 @@ function App() {
                 <Route path="/methods/eppic" element={<EppicMethodPage />} />
                 <Route path="/methods/orthology" element={<OrthologyMethodPage />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
-                <Route path="" element={<Navigate to="/" replace />} />
-
               </Routes>
             </Box>
           </Box>
+          <Toaster position="top-right" />
         </Router>
-        <Toaster position="top-right" />
       </ThemeProvider>
     </QueryClientProvider>
   );
