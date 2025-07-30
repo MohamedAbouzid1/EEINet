@@ -10,7 +10,7 @@ const FooterComponent = () => {
                     <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
                         <div className="mb-6 md:mb-0">
 
-                            <a href="https://eeinet.com" className="flex flex-col items-center">
+                            <a href="https://apps.cosy.bio/eeinet/" className="flex flex-col items-center">
                                 <img
                                     src="logo_colored.png"
                                     className="w-32 h-32 mb-2"

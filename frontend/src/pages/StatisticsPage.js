@@ -77,10 +77,7 @@ const StatisticsPage = () => {
         type: method.method_type,
     })) || [];
 
-    const jaccardData = distributions.jaccard_distribution?.map(item => ({
-        range: item.jaccard_range,
-        count: parseInt(item.count),
-    })) || [];
+
 
     const confidenceDistData = distributions.confidence_distribution?.map(item => ({
         range: item.confidence_range,
@@ -206,31 +203,6 @@ const StatisticsPage = () => {
 
                     {/* Quality Distributions */}
                     <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
-                        <Grid item xs={12} md={6}>
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.4 }}
-                            >
-                                <Card>
-                                    <CardContent>
-                                        <Typography variant="h6" gutterBottom>
-                                            Jaccard Percentage Distribution (contact based networks)
-                                        </Typography>
-                                        <ResponsiveContainer width="100%" height={300}>
-                                            <BarChart data={jaccardData}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="range" />
-                                                <YAxis />
-                                                <Tooltip />
-                                                <Bar dataKey="count" fill="#388e3c" />
-                                            </BarChart>
-                                        </ResponsiveContainer>
-                                    </CardContent>
-                                </Card>
-                            </motion.div>
-                        </Grid>
-
                         <Grid item xs={12} md={6}>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
