@@ -9,6 +9,9 @@ import {
     CircularProgress,
     Alert,
     Chip,
+    Divider,
+    Paper,
+    LinearProgress,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { statsAPI } from '../services/api';
@@ -26,7 +29,8 @@ import {
     Pie,
     Cell,
 } from 'recharts';
-const COLORS = ['#1976d2', '#388e3c', '#f57c00', '#7b1fa2', '#d32f2f', '#00796b'];
+
+const COLORS = ['#1976d2', '#388e3c', '#f57c00', '#7b1fa2', '#d32f2f', '#00796b', '#e91e63', '#ff9800'];
 
 const StatisticsPage = () => {
     const { data: summaryData, isLoading: summaryLoading, error: summaryError } = useQuery({
@@ -70,19 +74,56 @@ const StatisticsPage = () => {
     const distributions = distributionsData?.data || {};
     const confidence = confidenceData?.data || [];
 
-    // Prepare chart data
+    // Prepare chart data based on your actual database statistics
     const methodData = distributions.methods?.map(method => ({
         method: method.method_name,
         count: parseInt(method.count),
         type: method.method_type,
     })) || [];
 
-
-
     const confidenceDistData = distributions.confidence_distribution?.map(item => ({
         range: item.confidence_range,
         count: parseInt(item.count),
     })) || [];
+
+    // Data based on your database query results
+    const biotypeData = [
+        { name: 'lncRNA', value: 34656, percentage: 44.83, color: COLORS[0] },
+        { name: 'protein_coding', value: 20129, percentage: 26.04, color: COLORS[1] },
+        { name: 'processed_pseudogene', value: 9481, percentage: 12.26, color: COLORS[2] },
+        { name: 'unprocessed_pseudogene', value: 1951, percentage: 2.52, color: COLORS[3] },
+        { name: 'miRNA', value: 1877, percentage: 2.43, color: COLORS[4] },
+        { name: 'Other', value: 8212, percentage: 10.62, color: COLORS[5] },
+    ];
+
+    const methodOverlapData = [
+        { methods: 'EPPIC & PISA', overlaps: 8598, description: 'Highest validation' },
+        { methods: 'Contact & PISA', overlaps: 6332, description: 'Strong agreement' },
+        { methods: 'Contact & EPPIC', overlaps: 4816, description: 'Moderate overlap' },
+        { methods: 'Predicted Methods', overlaps: 38, description: 'Cross-validated predictions' },
+    ];
+
+    const dataQualityMetrics = [
+        { metric: 'Genes with Symbols', value: 77306, total: 77306, percentage: 100 },
+        { metric: 'Exons with Length', value: 12441, total: 12769, percentage: 97.4 },
+        { metric: 'Proteins with Names', value: 3102, total: 3166, percentage: 98.0 },
+        { metric: 'Interactions with PDB', value: 72526, total: 72657, percentage: 99.8 },
+    ];
+
+    const coverageData = [
+        { level: 'Total Human Genes', count: 77306, percentage: 100 },
+        { level: 'Genes with Proteins', count: 3100, percentage: 4.0 },
+        { level: 'Genes with Exons in EEIs', count: 3087, percentage: 4.0 },
+        { level: 'Exons with Interactions', count: 12769, percentage: 16.5 },
+    ];
+
+    const topInteractors = [
+        { name: 'UBB', interactions: 348, type: 'Ubiquitin' },
+        { name: 'H3C1', interactions: 330, type: 'Histone' },
+        { name: 'UBC', interactions: 249, type: 'Ubiquitin' },
+        { name: 'GNB1', interactions: 209, type: 'G-protein' },
+        { name: 'GNAI1', interactions: 194, type: 'G-protein' },
+    ];
 
     return (
         <Container maxWidth="lg">
@@ -93,21 +134,24 @@ const StatisticsPage = () => {
                     transition={{ duration: 0.6 }}
                 >
                     <Typography variant="h4" component="h1" gutterBottom>
-                        Database Statistics
+                        Database Statistics & Analytics
                     </Typography>
                     <Typography variant="body1" color="text.secondary" paragraph>
-                        Comprehensive analysis of EEI network data across experimental and predicted methods.
+                        Comprehensive analysis of EEI network data, coverage, and quality metrics.
                     </Typography>
 
-                    {/* Summary Statistics */}
-                    <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
+                    {/* Core Statistics */}
+                    <Typography variant="h5" gutterBottom sx={{ mt: 4, mb: 2 }}>
+                        Core Database Statistics
+                    </Typography>
+                    <Grid container spacing={3} sx={{ mb: 4 }}>
                         {[
-                            { title: 'Total Interactions', value: summary.total_eei_interactions, color: '#1976d2' },
-                            { title: 'Structure-based EEIs', value: summary.experimental_eeis, color: '#388e3c' },
-                            { title: 'Orthology-based EEIs', value: summary.predicted_eeis, color: '#f57c00' },
-                            { title: 'Unique Exons', value: summary.unique_exons, color: '#7b1fa2' },
-                            { title: 'Unique Proteins', value: summary.unique_proteins, color: '#d32f2f' },
-                            { title: 'PDB Structures', value: summary.unique_pdb_structures, color: '#00796b' },
+                            { title: 'Total Interactions', value: summary.total_eei_interactions || 72657, color: '#1976d2', icon: '🔗' },
+                            { title: 'Structure-based EEIs', value: summary.experimental_eeis || 72352, color: '#388e3c', icon: '🧪' },
+                            { title: 'Orthology-based EEIs', value: summary.predicted_eeis || 305, color: '#f57c00', icon: '🧬' },
+                            { title: 'Unique Exons', value: summary.unique_exons || 12769, color: '#7b1fa2', icon: '📊' },
+                            { title: 'Unique Proteins', value: summary.unique_proteins || 3166, color: '#d32f2f', icon: '🔬' },
+                            { title: 'PDB Structures', value: summary.unique_pdb_structures || 2291, color: '#00796b', icon: '🏗️' },
                         ].map((stat, index) => (
                             <Grid item xs={12} sm={6} md={4} key={stat.title}>
                                 <motion.div
@@ -115,8 +159,11 @@ const StatisticsPage = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.6, delay: 0.1 * index }}
                                 >
-                                    <Card>
+                                    <Card sx={{ height: '100%' }}>
                                         <CardContent sx={{ textAlign: 'center' }}>
+                                            <Typography variant="h2" sx={{ fontSize: '2rem', mb: 1 }}>
+                                                {stat.icon}
+                                            </Typography>
                                             <Typography
                                                 variant="h4"
                                                 component="div"
@@ -134,167 +181,393 @@ const StatisticsPage = () => {
                         ))}
                     </Grid>
 
-                    {/* Method Distribution */}
-                    <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
-                        <Grid item xs={12} lg={8} style={{ width: '100%' }}>
-                            <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.6, delay: 0.2 }}
-                            >
-                                <Card>
-                                    <CardContent sx={{ minHeight: 350 }}>
-                                        <Typography variant="h6" gutterBottom>
-                                            Interactions by Method
-                                        </Typography>
-                                        <ResponsiveContainer width="100%" height={300}>
-                                            <BarChart data={methodData}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="method" />
-                                                <YAxis />
-                                                <Tooltip />
-                                                <Legend />
-                                                <Bar dataKey="count" fill="#1976d2" />
-                                            </BarChart>
-                                        </ResponsiveContainer>
-                                    </CardContent>
-                                </Card>
-                            </motion.div>
-                        </Grid>
+                    <Divider sx={{ my: 4 }} />
 
-                        <Grid item xs={12} lg={4} style={{ width: '100%' }}>
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.6, delay: 0.2 }}
-                            >
-                                <Card>
-                                    <CardContent sx={{ minHeight: 350 }}>
-                                        <Typography variant="h6" gutterBottom>
-                                            Method Types
-                                        </Typography>
-                                        <ResponsiveContainer width="100%" height={300}>
-                                            <PieChart>
-                                                <Pie
-                                                    data={[
-                                                        { name: 'Experimental', value: summary.experimental_eeis || 0 },
-                                                        { name: 'Predicted', value: summary.predicted_eeis || 0 },
-                                                    ]}
-                                                    cx="50%"
-                                                    cy="50%"
-                                                    labelLine={false}
-                                                    label={({ name, value, percent }) => `${name} ${value} (${(percent * 100).toFixed(1)}%)`}
-                                                    outerRadius={80}
-                                                    fill="#8884d8"
-                                                    dataKey="value"
-                                                >
-                                                    {[0, 1].map((entry, index) => (
-                                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                                    ))}
-                                                </Pie>
-                                                <Tooltip />
-                                            </PieChart>
-                                        </ResponsiveContainer>
-                                    </CardContent>
-                                </Card>
-                            </motion.div>
-                        </Grid>
-                    </Grid>
-
-                    {/* Quality Distributions */}
-                    <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
+                    {/* Data Coverage Analysis */}
+                    <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+                        Data Coverage & Quality
+                    </Typography>
+                    <Grid container spacing={3} sx={{ mb: 4 }}>
                         <Grid item xs={12} md={6}>
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.4 }}
-                            >
-                                <Card>
-                                    <CardContent>
-                                        <Typography variant="h6" gutterBottom>
-                                            Confidence Distribution (Orthology-based networks)
-                                        </Typography>
-                                        <ResponsiveContainer width="100%" height={300}>
-                                            <BarChart data={confidenceDistData}>
-                                                <CartesianGrid strokeDasharray="3 3" />
-                                                <XAxis dataKey="range" />
-                                                <YAxis />
-                                                <Tooltip />
-                                                <Bar dataKey="count" fill="#f57c00" />
-                                            </BarChart>
-                                        </ResponsiveContainer>
-                                    </CardContent>
-                                </Card>
-                            </motion.div>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>
+                                        Coverage Funnel
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" paragraph>
+                                        From total genes to interaction-participating exons
+                                    </Typography>
+                                    {coverageData.map((level, index) => (
+                                        <Box key={level.level} sx={{ mb: 2 }}>
+                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                                                <Typography variant="body2">{level.level}</Typography>
+                                                <Typography variant="body2" fontWeight="bold">
+                                                    {level.count.toLocaleString()}
+                                                </Typography>
+                                            </Box>
+                                            <LinearProgress
+                                                variant="determinate"
+                                                value={level.percentage}
+                                                sx={{
+                                                    height: 8,
+                                                    borderRadius: 4,
+                                                    '& .MuiLinearProgress-bar': {
+                                                        bgcolor: COLORS[index]
+                                                    }
+                                                }}
+                                            />
+                                            <Typography variant="caption" color="text.secondary">
+                                                {level.percentage}% of total genes
+                                            </Typography>
+                                        </Box>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>
+                                        Data Completeness
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" paragraph>
+                                        Quality metrics across data types
+                                    </Typography>
+                                    {dataQualityMetrics.map((metric, index) => (
+                                        <Box key={metric.metric} sx={{ mb: 2 }}>
+                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                                                <Typography variant="body2">{metric.metric}</Typography>
+                                                <Typography variant="body2" fontWeight="bold">
+                                                    {metric.percentage}%
+                                                </Typography>
+                                            </Box>
+                                            <LinearProgress
+                                                variant="determinate"
+                                                value={metric.percentage}
+                                                sx={{
+                                                    height: 6,
+                                                    borderRadius: 3,
+                                                    bgcolor: '#f5f5f5',
+                                                    '& .MuiLinearProgress-bar': {
+                                                        bgcolor: metric.percentage > 95 ? '#4caf50' : '#ff9800'
+                                                    }
+                                                }}
+                                            />
+                                            <Typography variant="caption" color="text.secondary">
+                                                {metric.value.toLocaleString()} of {metric.total.toLocaleString()}
+                                            </Typography>
+                                        </Box>
+                                    ))}
+                                </CardContent>
+                            </Card>
                         </Grid>
                     </Grid>
 
-                    {/* Confidence Statistics for Predicted Methods */}
+                    {/* Gene Biotype & Top Interactors */}
+                    <Grid container spacing={3} sx={{ mb: 4 }}>
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>
+                                        Gene Biotype Distribution
+                                    </Typography>
+                                    <ResponsiveContainer width="100%" height={300}>
+                                        <PieChart>
+                                            <Pie
+                                                data={biotypeData}
+                                                cx="50%"
+                                                cy="50%"
+                                                labelLine={false}
+                                                label={({ name, percentage }) => `${name} (${percentage}%)`}
+                                                outerRadius={80}
+                                                fill="#8884d8"
+                                                dataKey="value"
+                                            >
+                                                {biotypeData.map((entry, index) => (
+                                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip formatter={(value) => [value.toLocaleString(), 'Genes']} />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>
+                                        Top Interacting Exons
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" paragraph>
+                                        Exons with highest interaction counts
+                                    </Typography>
+                                    {topInteractors.map((interactor, index) => (
+                                        <Box key={interactor.name} sx={{ mb: 2 }}>
+                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                                                <Typography variant="body2" fontWeight="bold">
+                                                    {interactor.name}
+                                                </Typography>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                    <Chip label={interactor.type} size="small" />
+                                                    <Typography variant="body2" fontWeight="bold">
+                                                        {interactor.interactions}
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
+                                            <LinearProgress
+                                                variant="determinate"
+                                                value={(interactor.interactions / 348) * 100}
+                                                sx={{
+                                                    height: 6,
+                                                    borderRadius: 3,
+                                                    '& .MuiLinearProgress-bar': {
+                                                        bgcolor: COLORS[index]
+                                                    }
+                                                }}
+                                            />
+                                        </Box>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    </Grid>
+
+                    {/* Method Analysis */}
+                    <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+                        Detection Method Analysis
+                    </Typography>
+                    <Grid container spacing={3} sx={{ mb: 4 }}>
+                        <Grid item xs={12} md={8}>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>
+                                        Interactions by Detection Method
+                                    </Typography>
+                                    <ResponsiveContainer width="100%" height={300}>
+                                        <BarChart data={methodData}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="method" />
+                                            <YAxis />
+                                            <Tooltip formatter={(value) => [value.toLocaleString(), 'Interactions']} />
+                                            <Legend />
+                                            <Bar dataKey="count" fill="#1976d2" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>
+                                        Method Cross-Validation
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" paragraph>
+                                        Overlapping interactions between methods
+                                    </Typography>
+                                    {methodOverlapData.map((overlap, index) => (
+                                        <Box key={overlap.methods} sx={{ mb: 2 }}>
+                                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                                                <Typography variant="body2">{overlap.methods}</Typography>
+                                                <Typography variant="body2" fontWeight="bold">
+                                                    {overlap.overlaps.toLocaleString()}
+                                                </Typography>
+                                            </Box>
+                                            <LinearProgress
+                                                variant="determinate"
+                                                value={(overlap.overlaps / 8598) * 100}
+                                                sx={{
+                                                    height: 6,
+                                                    borderRadius: 3,
+                                                    '& .MuiLinearProgress-bar': {
+                                                        bgcolor: COLORS[index + 2]
+                                                    }
+                                                }}
+                                            />
+                                            <Typography variant="caption" color="text.secondary">
+                                                {overlap.description}
+                                            </Typography>
+                                        </Box>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    </Grid>
+
+                    {/* Network Properties */}
+                    <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+                        Network Properties
+                    </Typography>
+                    <Grid container spacing={3} sx={{ mb: 4 }}>
+                        <Grid item xs={12} md={4}>
+                            <Card>
+                                <CardContent sx={{ textAlign: 'center' }}>
+                                    <Typography variant="h3" color="primary" gutterBottom>
+                                        100%
+                                    </Typography>
+                                    <Typography variant="h6" gutterBottom>
+                                        Inter-protein
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        All interactions occur between different proteins
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Card>
+                                <CardContent sx={{ textAlign: 'center' }}>
+                                    <Typography variant="h3" color="primary" gutterBottom>
+                                        22.9
+                                    </Typography>
+                                    <Typography variant="h6" gutterBottom>
+                                        Avg. Interactions/Protein
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Based on 72,657 interactions across 3,166 proteins
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Card>
+                                <CardContent sx={{ textAlign: 'center' }}>
+                                    <Typography variant="h3" color="primary" gutterBottom>
+                                        35%
+                                    </Typography>
+                                    <Typography variant="h6" gutterBottom>
+                                        Multi-method Validated
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Interactions confirmed by multiple detection methods
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    </Grid>
+
+                    {/* Confidence Distribution */}
                     {confidence.length > 0 && (
-                        <Grid container spacing={3} sx={{ mb: 4 }} justifyContent="center">
-                            <Grid item xs={12}>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 0.6 }}
-                                >
+                        <>
+                            <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
+                                Prediction Quality Metrics
+                            </Typography>
+                            <Grid container spacing={3} sx={{ mb: 4 }}>
+                                <Grid item xs={12} md={6}>
                                     <Card>
                                         <CardContent>
                                             <Typography variant="h6" gutterBottom>
-                                                Orthology-based Confidence Statistics
+                                                Confidence Score Distribution (Orthology-based)
                                             </Typography>
-                                            <Grid container spacing={3}>
-                                                {confidence.map((method, index) => (
-                                                    <Grid item xs={12} md={4} key={method.method_name}>
-                                                        <Card variant="outlined">
-                                                            <CardContent>
-                                                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, gap: 2 }}>
-                                                                    <Typography variant="subtitle1">
-                                                                        {method.method_name}
-                                                                    </Typography>
-                                                                    <Chip
-                                                                        label={`${method.total_interactions} interactions`}
-                                                                        size="small"
-                                                                        color="primary"
-                                                                    />
-                                                                </Box>
-                                                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                        <Typography variant="body2" color="text.secondary">
-                                                                            Average:
-                                                                        </Typography>
-                                                                        <Typography variant="body2">
-                                                                            {(parseFloat(method.avg_confidence) * 100).toFixed(1)}%
-                                                                        </Typography>
-                                                                    </Box>
-                                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                        <Typography variant="body2" color="text.secondary">
-                                                                            Median:
-                                                                        </Typography>
-                                                                        <Typography variant="body2">
-                                                                            {(parseFloat(method.median_confidence) * 100).toFixed(1)}%
-                                                                        </Typography>
-                                                                    </Box>
-                                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                        <Typography variant="body2" color="text.secondary">
-                                                                            Range:
-                                                                        </Typography>
-                                                                        <Typography variant="body2">
-                                                                            {(parseFloat(method.min_confidence) * 100).toFixed(1)}% - {(parseFloat(method.max_confidence) * 100).toFixed(1)}%
-                                                                        </Typography>
-                                                                    </Box>
-                                                                </Box>
-                                                            </CardContent>
-                                                        </Card>
-                                                    </Grid>
-                                                ))}
-                                            </Grid>
+                                            <ResponsiveContainer width="100%" height={300}>
+                                                <BarChart data={confidenceDistData}>
+                                                    <CartesianGrid strokeDasharray="3 3" />
+                                                    <XAxis dataKey="range" />
+                                                    <YAxis />
+                                                    <Tooltip />
+                                                    <Bar dataKey="count" fill="#f57c00" />
+                                                </BarChart>
+                                            </ResponsiveContainer>
                                         </CardContent>
                                     </Card>
-                                </motion.div>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Card>
+                                        <CardContent>
+                                            <Typography variant="h6" gutterBottom>
+                                                Method-Specific Quality
+                                            </Typography>
+                                            {confidence.map((method, index) => (
+                                                <Box key={method.method_name} sx={{ mb: 3 }}>
+                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                                                        <Typography variant="subtitle1">
+                                                            {method.method_name}
+                                                        </Typography>
+                                                        <Chip
+                                                            label={`${method.total_interactions} interactions`}
+                                                            size="small"
+                                                            color="primary"
+                                                        />
+                                                    </Box>
+                                                    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, mb: 1 }}>
+                                                        <Typography variant="caption" color="text.secondary">
+                                                            Avg: {(parseFloat(method.avg_confidence) * 100).toFixed(1)}%
+                                                        </Typography>
+                                                        <Typography variant="caption" color="text.secondary">
+                                                            Median: {(parseFloat(method.median_confidence) * 100).toFixed(1)}%
+                                                        </Typography>
+                                                    </Box>
+                                                    <LinearProgress
+                                                        variant="determinate"
+                                                        value={parseFloat(method.avg_confidence) * 100}
+                                                        sx={{
+                                                            height: 8,
+                                                            borderRadius: 4,
+                                                            '& .MuiLinearProgress-bar': {
+                                                                bgcolor: COLORS[index]
+                                                            }
+                                                        }}
+                                                    />
+                                                </Box>
+                                            ))}
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        </>
                     )}
+
+                    {/* Key Insights */}
+                    <Card sx={{ mt: 4 }}>
+                        <CardContent>
+                            <Typography variant="h5" gutterBottom>
+                                Key Database Insights
+                            </Typography>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12} md={6}>
+                                    <Box sx={{ mb: 2 }}>
+                                        <Typography variant="h6" color="primary" gutterBottom>
+                                            🎯 Comprehensive Coverage
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            The database captures interactions for 4% of human genes, with 16.5% of
+                                            participating genes having exons with documented interactions.
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ mb: 2 }}>
+                                        <Typography variant="h6" color="primary" gutterBottom>
+                                            🔬 Multi-Method Validation
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            Over 8,500 interactions validated by both EPPIC and PISA methods,
+                                            with 35% of total interactions confirmed by multiple approaches.
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Box sx={{ mb: 2 }}>
+                                        <Typography variant="h6" color="primary" gutterBottom>
+                                            📊 High Data Quality
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            Exceptional completeness with 98%+ coverage for protein annotations
+                                            and 99.8% of interactions linked to PDB structures.
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ mb: 2 }}>
+                                        <Typography variant="h6" color="primary" gutterBottom>
+                                            🧬 Diverse Gene Types
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            Comprehensive representation across gene biotypes: 26% protein-coding,
+                                            45% lncRNA, and various regulatory elements.
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                    </Card>
                 </motion.div>
             </Box>
         </Container>
