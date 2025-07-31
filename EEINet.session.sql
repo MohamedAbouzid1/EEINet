@@ -96,3 +96,13 @@ SELECT column_name,
 FROM information_schema.columns
 WHERE table_name = 'genes'
     AND table_schema = 'public';
+SELECT *
+FROM eei_interactions ei
+    JOIN exons e1 ON ei.exon1_id = e1.exon_id
+    JOIN exons e2 ON ei.exon2_id = e2.exon_id
+WHERE e1.ensembl_exon_id = 'ENSE00001232355'
+    OR e2.ensembl_exon_id = 'ENSE00001232355'
+LIMIT 5;
+SELECT *
+FROM genes
+LIMIT 10;
