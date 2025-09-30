@@ -239,114 +239,175 @@ const SearchPage = () => {
                             )}
                         </Box>
 
-                        <Grid container spacing={2}>
+                        <Grid container spacing={3}>
                             {searchResults.data.results.map((result) => (
-                                <Grid item xs={12} key={result.eei_id}>
+                                <Grid item xs={12} sm={6} lg={4} key={result.eei_id}>
                                     <motion.div
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.3 }}
                                     >
-                                        <Card sx={{ '&:hover': { boxShadow: 4 } }}>
-                                            <CardContent>
-                                                <Box sx={{ display: 'flex', justifyContent: 'between', alignItems: 'start', mb: 2 }}>
-                                                    <Box sx={{ flexGrow: 1 }}>
-                                                        <Typography variant="h6" gutterBottom>
-                                                            EEI #{result.eei_id}
-                                                        </Typography>
-                                                        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
-                                                            <Box>
-                                                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: 14 }}>
-                                                                    Exon 1:
-                                                                </Typography>
-                                                                <Button
-                                                                    component={Link}
-                                                                    to={`/exon/${result.exon1}`}
-                                                                    variant="outlined"
+                                        <Card sx={{
+                                            '&:hover': { boxShadow: 6 },
+                                            height: '100%',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            minHeight: '320px'
+                                        }}>
+                                            <CardContent sx={{
+                                                flexGrow: 1,
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                p: 3
+                                            }}>
+                                                {/* Header with EEI ID and Methods */}
+                                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+                                                    <Typography variant="h6" sx={{ fontSize: '1.3rem', fontWeight: 600 }}>
+                                                        EEI #{result.eei_id}
+                                                    </Typography>
+                                                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                                                        {result.method_names && result.method_names.length > 0 ? (
+                                                            result.method_names.map((method, index) => (
+                                                                <Chip
+                                                                    key={index}
+                                                                    label={method}
+                                                                    color={result.method_type === 'experimental' ? 'primary' : 'secondary'}
                                                                     size="small"
-                                                                    sx={{ ml: 1, fontSize: 14, px: 1, py: 0.5 }}
-                                                                >
-                                                                    {result.exon1}
-                                                                </Button>
-                                                            </Box>
-                                                            <Box>
-                                                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: 14 }}>
-                                                                    Exon 2:
-                                                                </Typography>
-                                                                <Button
-                                                                    component={Link}
-                                                                    to={`/exon/${result.exon2}`}
-                                                                    variant="outlined"
-                                                                    size="small"
-                                                                    sx={{ ml: 1, fontSize: 14, px: 1, py: 0.5 }}
-                                                                >
-                                                                    {result.exon2}
-                                                                </Button>
-                                                            </Box>
-                                                        </Box>
-                                                        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
-                                                            <Box>
-                                                                <Typography variant="caption" color="text.secondary">
-                                                                    Protein 1:
-                                                                </Typography>
-                                                                <Button
-                                                                    component={Link}
-                                                                    to={`/protein/${result.protein1}`}
-                                                                    variant="text"
-                                                                    size="small"
-                                                                    sx={{ ml: 1, px: 1, py: 0.5 }}
-                                                                >
-                                                                    {result.protein1}
-                                                                </Button>
-                                                            </Box>
-                                                            <Box>
-                                                                <Typography variant="caption" color="text.secondary">
-                                                                    Protein 2:
-                                                                </Typography>
-                                                                <Button
-                                                                    component={Link}
-                                                                    to={`/protein/${result.protein2}`}
-                                                                    variant="text"
-                                                                    size="small"
-                                                                    sx={{ ml: 1, px: 1, py: 0.5 }}
-                                                                >
-                                                                    {result.protein2}
-                                                                </Button>
-                                                            </Box>
-                                                        </Box>
-                                                    </Box>
-                                                    <Box sx={{ textAlign: 'right' }}>
-                                                        <Chip
-                                                            label={result.method_name}
-                                                            color={result.method_type === 'experimental' ? 'primary' : 'secondary'}
-                                                            size="small"
-                                                            sx={{ mb: 1 }}
-                                                        />
-                                                        {result.confidence && (
-                                                            <Typography variant="caption" display="block" color="text.secondary">
-                                                                Confidence: {(result.confidence * 100).toFixed(1)}%
-                                                            </Typography>
+                                                                    variant="filled"
+                                                                    sx={{ fontSize: '0.8rem', height: '24px' }}
+                                                                />
+                                                            ))
+                                                        ) : (
+                                                            <Chip
+                                                                label={result.method_name}
+                                                                color={result.method_type === 'experimental' ? 'primary' : 'secondary'}
+                                                                size="small"
+                                                                sx={{ fontSize: '0.8rem', height: '24px' }}
+                                                            />
                                                         )}
-
                                                     </Box>
                                                 </Box>
-                                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <Box sx={{ display: 'flex', gap: 1 }}>
-                                                        {result.pdb_id && (
-                                                            <Chip label={`PDB: ${result.pdb_id}`} variant="outlined" size="small" />
+
+                                                {/* Exon Information */}
+                                                <Box sx={{ mb: 3 }}>
+                                                    <Box sx={{ display: 'flex', gap: 1, mb: 1.5, alignItems: 'center' }}>
+                                                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9rem', minWidth: '60px', fontWeight: 500 }}>
+                                                            Exon 1:
+                                                        </Typography>
+                                                        <Button
+                                                            component={Link}
+                                                            to={`/exon/${result.exon1}`}
+                                                            variant="outlined"
+                                                            size="small"
+                                                            sx={{ fontSize: '0.85rem', px: 1.5, py: 0.5, minHeight: '28px' }}
+                                                        >
+                                                            {result.exon1}
+                                                        </Button>
+                                                    </Box>
+                                                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                                                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9rem', minWidth: '60px', fontWeight: 500 }}>
+                                                            Exon 2:
+                                                        </Typography>
+                                                        <Button
+                                                            component={Link}
+                                                            to={`/exon/${result.exon2}`}
+                                                            variant="outlined"
+                                                            size="small"
+                                                            sx={{ fontSize: '0.85rem', px: 1.5, py: 0.5, minHeight: '28px' }}
+                                                        >
+                                                            {result.exon2}
+                                                        </Button>
+                                                    </Box>
+                                                </Box>
+
+                                                {/* Protein Information */}
+                                                <Box sx={{ mb: 3 }}>
+                                                    <Box sx={{ display: 'flex', gap: 1, mb: 1.5, alignItems: 'center' }}>
+                                                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9rem', minWidth: '60px', fontWeight: 500 }}>
+                                                            Protein 1:
+                                                        </Typography>
+                                                        <Button
+                                                            component={Link}
+                                                            to={`/protein/${result.protein1}`}
+                                                            variant="text"
+                                                            size="small"
+                                                            sx={{ fontSize: '0.85rem', px: 1.5, py: 0.5, minHeight: '28px' }}
+                                                        >
+                                                            {result.protein1}
+                                                        </Button>
+                                                    </Box>
+                                                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                                                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9rem', minWidth: '60px', fontWeight: 500 }}>
+                                                            Protein 2:
+                                                        </Typography>
+                                                        <Button
+                                                            component={Link}
+                                                            to={`/protein/${result.protein2}`}
+                                                            variant="text"
+                                                            size="small"
+                                                            sx={{ fontSize: '0.85rem', px: 1.5, py: 0.5, minHeight: '28px' }}
+                                                        >
+                                                            {result.protein2}
+                                                        </Button>
+                                                    </Box>
+                                                </Box>
+
+                                                {/* Additional Info Chips - Fixed Height Container */}
+                                                <Box sx={{
+                                                    flexGrow: 1,
+                                                    mb: 3,
+                                                    minHeight: '60px',
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    justifyContent: 'flex-start'
+                                                }}>
+                                                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                                                        {result.pdb_ids && result.pdb_ids.length > 0 ? (
+                                                            result.pdb_ids.map((pdbId, index) => (
+                                                                <Chip
+                                                                    key={index}
+                                                                    label={`PDB: ${pdbId}`}
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                    sx={{ fontSize: '0.8rem', height: '26px' }}
+                                                                />
+                                                            ))
+                                                        ) : result.pdb_id && (
+                                                            <Chip
+                                                                label={`PDB: ${result.pdb_id}`}
+                                                                variant="outlined"
+                                                                size="small"
+                                                                sx={{ fontSize: '0.8rem', height: '26px' }}
+                                                            />
                                                         )}
                                                         {result.gene1 && (
-                                                            <Chip label={`Gene 1: ${result.gene1}`} variant="outlined" size="small" />
+                                                            <Chip
+                                                                label={`Gene 1: ${result.gene1}`}
+                                                                variant="outlined"
+                                                                size="small"
+                                                                sx={{ fontSize: '0.8rem', height: '26px' }}
+                                                            />
                                                         )}
                                                         {result.gene2 && (
-                                                            <Chip label={`Gene 2: ${result.gene2}`} variant="outlined" size="small" />
+                                                            <Chip
+                                                                label={`Gene 2: ${result.gene2}`}
+                                                                variant="outlined"
+                                                                size="small"
+                                                                sx={{ fontSize: '0.8rem', height: '26px' }}
+                                                            />
                                                         )}
                                                     </Box>
+                                                </Box>
+
+                                                {/* View Details Button */}
+                                                <Box sx={{ mt: 'auto' }}>
                                                     <Button
                                                         component={Link}
                                                         to={`/interaction/${result.eei_id}`}
                                                         variant="contained"
-                                                        size="small"
+                                                        size="medium"
+                                                        fullWidth
+                                                        sx={{ fontSize: '0.9rem', py: 1.25, fontWeight: 600 }}
                                                     >
                                                         View Details
                                                     </Button>

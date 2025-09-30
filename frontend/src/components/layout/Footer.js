@@ -1,77 +1,235 @@
-"use client";
-
-import { X, GitHub, Web, LinkedIn } from "@mui/icons-material";
+import React from 'react';
+import {
+    Box,
+    Container,
+    Typography,
+    Link,
+    Divider,
+    Grid,
+    IconButton,
+} from '@mui/material';
+import {
+    X,
+    GitHub,
+    Web,
+    LinkedIn,
+} from '@mui/icons-material';
+import logo from '../../assets/logo_colored.png';
 
 const FooterComponent = () => {
     return (
-        <footer className="bg-white border-t border-gray-200">
-            <div className="mx-auto max-w-screen-xl px-4 py-8">
-                <div className="w-full">
-                    <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
-                        <div className="mb-6 md:mb-0">
+        <Box
+            component="footer"
+            sx={{
+                backgroundColor: 'white',
+                borderTop: '1px solid #e2e8f0',
+                py: 4,
+                mt: 'auto',
+            }}
+        >
+            <Container maxWidth="lg">
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', md: 'row' },
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        gap: 4,
+                    }}
+                >
+                    {/* Logo Section */}
+                    <Box
+                        component={Link}
+                        href="https://apps.cosy.bio/eeinet/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: { xs: 'center', md: 'flex-start' },
+                            textDecoration: 'none',
+                            color: 'inherit',
+                            '&:hover': {
+                                textDecoration: 'none',
+                            },
+                        }}
+                    >
+                        <Box
+                            component="img"
+                            src={logo}
+                            alt="EEINet Logo"
+                            sx={{
+                                width: 128,
+                                height: 128,
+                                mb: 2,
+                                objectFit: 'contain',
+                            }}
+                        />
+                        <Typography
+                            variant="h4"
+                            component="span"
+                            sx={{
+                                fontWeight: 600,
+                                color: 'text.primary',
+                                whiteSpace: 'nowrap',
+                            }}
+                        >
+                            EEINet
+                        </Typography>
+                    </Box>
 
-                            <a href="https://apps.cosy.bio/eeinet/" className="flex flex-col items-center">
-                                <img
-                                    src="logo_colored.png"
-                                    className="w-32 h-32 mb-2"
-                                    alt="EEINet Logo"
-                                    style={{ marginLeft: '40px' }}
-                                />
-                                <span className="text-3xl font-semibold whitespace-nowrap text-gray-900">
-                                    &nbsp; &nbsp; EEINet
-                                </span>
-                            </a>
+                    {/* Imprint Section */}
+                    <Box sx={{ textAlign: { xs: 'center', md: 'right' } }}>
+                        <Typography
+                            variant="h6"
+                            component="h2"
+                            sx={{
+                                mb: 2,
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                color: 'text.primary',
+                            }}
+                        >
+                            Imprint
+                        </Typography>
+                        <Box sx={{ mb: 2 }}>
+                            <Typography variant="body2" paragraph sx={{ mb: 0.5 }}>
+                                Prof. Dr. Jan Baumbach
+                            </Typography>
+                            <Typography variant="body2" paragraph sx={{ mb: 0.5 }}>
+                                Chair of Computational Systems Biology
+                            </Typography>
+                            <Typography variant="body2" paragraph sx={{ mb: 0.5 }}>
+                                Phone: +49-40-42838-7313
+                            </Typography>
+                            <Typography variant="body2" paragraph sx={{ mb: 0.5 }}>
+                                E-Mail:{' '}
+                                <Link
+                                    href="mailto:cosy[at)zbh.uni-hamburg.de"
+                                    sx={{
+                                        color: 'text.secondary',
+                                        textDecoration: 'none',
+                                        '&:hover': {
+                                            textDecoration: 'underline',
+                                            color: 'text.primary',
+                                        },
+                                    }}
+                                >
+                                    cosy[at)zbh.uni-hamburg.de
+                                </Link>
+                            </Typography>
+                            <Typography variant="body2" paragraph sx={{ mb: 0.5 }}>
+                                Address: Prof. Dr. Jan Baumbach
+                            </Typography>
+                            <Typography variant="body2" paragraph sx={{ mb: 0.5 }}>
+                                University of Hamburg
+                            </Typography>
+                            <Typography variant="body2" paragraph sx={{ mb: 0.5 }}>
+                                Notkestraße 9
+                            </Typography>
+                            <Typography variant="body2" paragraph sx={{ mb: 0 }}>
+                                22607 Hamburg, Germany
+                            </Typography>
+                        </Box>
+                    </Box>
+                </Box>
 
-                        </div>
-                        <div style={{ marginRight: '20px' }}>
-                            <h2 className="mb-4 text-sm font-semibold text-gray-900 uppercase text-center">
-                                Imprint
-                            </h2>
+                <Divider sx={{ my: 3 }} />
 
-                            <p>Prof. Dr. Jan Baumbach</p>
-                            <p>Chair of Computational Systems Biology</p>
-                            <p>Phone: +49-40-42838-7313</p>
-                            <p>E-Mail: <a href="mailto:cosy[at)zbh.uni-hamburg.de" className="hover:underline hover:text-gray-700 transition-colors">cosy[at)zbh.uni-hamburg.de</a></p>
-                            <p>Address: Prof. Dr. Jan Baumbach</p>
-                            <p>University of Hamburg</p>
-                            <p>Notkestraße 9</p>
-                            <p>22607 Hamburg, Germany</p>
+                {/* Bottom Section */}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', sm: 'row' },
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: 2,
+                    }}
+                >
+                    {/* Copyright */}
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ textAlign: { xs: 'center', sm: 'left' } }}
+                    >
+                        © {new Date().getFullYear()}{' '}
+                        <Link
+                            href="#"
+                            sx={{
+                                color: 'text.secondary',
+                                textDecoration: 'none',
+                                '&:hover': {
+                                    textDecoration: 'underline',
+                                    color: 'text.primary',
+                                },
+                            }}
+                        >
+                            EEINet
+                        </Link>
+                        . All Rights Reserved.
+                    </Typography>
 
-                        </div>
-
-
-                    </div>
-                    <hr className="my-6 border-gray-200 sm:mx-auto lg:my-8" />
-                    <div className="w-full sm:flex sm:items-center sm:justify-between">
-                        <span className="text-sm text-gray-500 sm:text-center">
-                            © {new Date().getFullYear()}{" "}
-                            <a href="#" className="hover:underline hover:text-gray-700 transition-colors">
-                                EEINet
-                            </a>
-                            . All Rights Reserved.
-
-                        </span>
-                        <div className="flex mt-4 space-x-5 sm:justify-flex sm:mt-0">
-                            Follow us on: &nbsp;
-                            <a href="https://www.linkedin.com/company/cosy-bio/" className="text-gray-500 hover:text-gray-900 transition-colors">
-                                <LinkedIn className="w-4 h-4" />
-                                <span className="sr-only">LinkedIn</span>
-                            </a>
-                            <a href="https://x.com/cosybio_UHH" className="text-gray-500 hover:text-gray-900 transition-colors">
-                                <X className="w-4 h-4" />
-                                <span className="sr-only">X</span>
-                            </a>
-
-                            <a href="https://www.cosy.bio/" className="text-gray-500 hover:text-gray-900 transition-colors">
-                                <Web className="w-4 h-4" />
-                                <span className="sr-only">Website</span>
-                                &nbsp; &nbsp; &nbsp;&nbsp;
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer >
+                    {/* Social Links */}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
+                        }}
+                    >
+                        <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
+                            Follow us on:
+                        </Typography>
+                        <IconButton
+                            component={Link}
+                            href="https://www.linkedin.com/company/cosy-bio/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            size="small"
+                            sx={{
+                                color: 'text.secondary',
+                                '&:hover': {
+                                    color: 'primary.main',
+                                },
+                            }}
+                        >
+                            <LinkedIn fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                            component={Link}
+                            href="https://x.com/cosybio_UHH"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            size="small"
+                            sx={{
+                                color: 'text.secondary',
+                                '&:hover': {
+                                    color: 'primary.main',
+                                },
+                            }}
+                        >
+                            <X fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                            component={Link}
+                            href="https://www.cosy.bio/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            size="small"
+                            sx={{
+                                color: 'text.secondary',
+                                '&:hover': {
+                                    color: 'primary.main',
+                                },
+                            }}
+                        >
+                            <Web fontSize="small" />
+                        </IconButton>
+                    </Box>
+                </Box>
+            </Container>
+        </Box>
     );
 };
 

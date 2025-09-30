@@ -172,6 +172,16 @@ const InteractionDetailsPage = () => {
     const isExperimental = interaction.method_type === 'experimental';
     const isPredicted = interaction.method_type === 'predicted';
 
+    // Function to get method route based on method name
+    const getMethodRoute = (methodName) => {
+        const methodNameLower = methodName.toLowerCase();
+        if (methodNameLower.includes('pisa')) return '/methods/pisa';
+        if (methodNameLower.includes('eppic')) return '/methods/eppic';
+        if (methodNameLower.includes('orthology')) return '/methods/orthology';
+        if (methodNameLower.includes('contact')) return '/methods/contact';
+        return null; // No specific method page available
+    };
+
     return (
         <Container maxWidth="lg">
             <Box sx={{ py: 4 }}>
@@ -195,11 +205,6 @@ const InteractionDetailsPage = () => {
                                         icon={isExperimental ? <Science /> : <Biotech />}
                                         label={interaction.method_name}
                                         color={isExperimental ? 'primary' : 'secondary'}
-                                        size="medium"
-                                    />
-                                    <Chip
-                                        label={isExperimental ? 'Experimental' : 'Predicted'}
-                                        variant="outlined"
                                         size="medium"
                                     />
                                 </Box>
@@ -331,52 +336,7 @@ const InteractionDetailsPage = () => {
                             </Card>
                         </Grid>
 
-                        {/* Quality Scores */}
-                        <Grid item xs={12} md={6}>
-                            <Card>
-                                <CardContent>
-                                    <Typography variant="h6" gutterBottom>
-                                        Quality Scores
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                        {interaction.jaccard_percent && (
-                                            <Box>
-                                                <Typography variant="body2" color="text.secondary" gutterBottom>
-                                                    Jaccard Percentage
-                                                </Typography>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                    <Chip
-                                                        label={`${interaction.jaccard_percent}%`}
-                                                        color="primary"
-                                                        size="medium"
-                                                    />
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        (Experimental overlap similarity)
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                        )}
-                                        {interaction.confidence && (
-                                            <Box>
-                                                <Typography variant="body2" color="text.secondary" gutterBottom>
-                                                    Prediction Confidence
-                                                </Typography>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                    <Chip
-                                                        label={`${(interaction.confidence * 100).toFixed(1)}%`}
-                                                        color="secondary"
-                                                        size="medium"
-                                                    />
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        (Orthology-based reliability)
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                        )}
-                                    </Box>
-                                </CardContent>
-                            </Card>
-                        </Grid>
+
 
                         {/* Structural Information */}
                         <Grid item xs={12} md={6}>
@@ -386,7 +346,34 @@ const InteractionDetailsPage = () => {
                                         Structural Information
                                     </Typography>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                        {interaction.pdb_id && (
+                                        {interaction.pdb_ids && interaction.pdb_ids.length > 0 && (
+                                            <Box>
+                                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                                    PDB Structure{interaction.pdb_ids.length > 1 ? 's' : ''}
+                                                </Typography>
+                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
+                                                    {interaction.pdb_ids.map((pdbId, index) => (
+                                                        <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                            <Chip
+                                                                label={pdbId}
+                                                                variant="outlined"
+                                                                size="medium"
+                                                            />
+                                                            <MuiLink
+                                                                href={`https://www.rcsb.org/structure/${pdbId}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
+                                                            >
+                                                                View in PDB
+                                                                <OpenInNew fontSize="small" />
+                                                            </MuiLink>
+                                                        </Box>
+                                                    ))}
+                                                </Box>
+                                            </Box>
+                                        )}
+                                        {interaction.pdb_id && !interaction.pdb_ids && (
                                             <Box>
                                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                                     PDB Structure
@@ -411,11 +398,25 @@ const InteractionDetailsPage = () => {
                                         )}
                                         <Box>
                                             <Typography variant="body2" color="text.secondary" gutterBottom>
-                                                Detection Method
+                                                Detection Method{interaction.method_names && interaction.method_names.length > 1 ? 's' : ''}
                                             </Typography>
-                                            <Typography variant="body1">
-                                                {interaction.method_name}
-                                            </Typography>
+                                            {interaction.method_names && interaction.method_names.length > 0 ? (
+                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                                    {interaction.method_names.map((method, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            label={method}
+                                                            color={interaction.method_type === 'experimental' ? 'primary' : 'secondary'}
+                                                            variant="filled"
+                                                            size="medium"
+                                                        />
+                                                    ))}
+                                                </Box>
+                                            ) : (
+                                                <Typography variant="body1">
+                                                    {interaction.method_name}
+                                                </Typography>
+                                            )}
                                         </Box>
                                         {interaction.created_at && (
                                             <Box>
@@ -511,104 +512,236 @@ const InteractionDetailsPage = () => {
                             {/* Method Details Tab */}
                             {tabValue === 0 && (
                                 <Box>
-                                    <Typography variant="h6" gutterBottom>
-                                        {interaction.method_name} Method Details
-                                    </Typography>
-
-                                    {/* PISA Attributes */}
-                                    {(interaction.free_energy !== null || interaction.buried_area !== null) && (
-                                        <Box sx={{ mb: 3 }}>
-                                            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
-                                                PISA Analysis
-                                            </Typography>
-                                            <TableContainer component={Paper} variant="outlined">
-                                                <Table size="small">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>Parameter</TableCell>
-                                                            <TableCell align="right">Value</TableCell>
-                                                            <TableCell>Description</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {interaction.free_energy !== null && (
-                                                            <TableRow>
-                                                                <TableCell>Free Energy</TableCell>
-                                                                <TableCell align="right">{interaction.free_energy} kcal/mol</TableCell>
-                                                                <TableCell>Binding free energy</TableCell>
-                                                            </TableRow>
-                                                        )}
-                                                        {interaction.buried_area !== null && (
-                                                            <TableRow>
-                                                                <TableCell>Buried Area</TableCell>
-                                                                <TableCell align="right">{interaction.buried_area} Ų</TableCell>
-                                                                <TableCell>Surface area buried upon binding</TableCell>
-                                                            </TableRow>
-                                                        )}
-                                                        {interaction.hydrogen_bonds !== null && (
-                                                            <TableRow>
-                                                                <TableCell>Hydrogen Bonds</TableCell>
-                                                                <TableCell align="right">{interaction.hydrogen_bonds}</TableCell>
-                                                                <TableCell>Number of hydrogen bonds</TableCell>
-                                                            </TableRow>
-                                                        )}
-                                                        {interaction.salt_bridges !== null && (
-                                                            <TableRow>
-                                                                <TableCell>Salt Bridges</TableCell>
-                                                                <TableCell align="right">{interaction.salt_bridges}</TableCell>
-                                                                <TableCell>Number of salt bridges</TableCell>
-                                                            </TableRow>
-                                                        )}
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                        </Box>
-                                    )}
-
-                                    {/* EPPIC Attributes */}
-                                    {(interaction.cs_score !== null || interaction.cr_score !== null) && (
-                                        <Box sx={{ mb: 3 }}>
-                                            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
-                                                EPPIC Analysis
-                                            </Typography>
-                                            <TableContainer component={Paper} variant="outlined">
-                                                <Table size="small">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>Score Type</TableCell>
-                                                            <TableCell align="right">Value</TableCell>
-                                                            <TableCell>Interpretation</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {interaction.cs_score !== null && (
-                                                            <TableRow>
-                                                                <TableCell>CS Score</TableCell>
-                                                                <TableCell align="right">{interaction.cs_score}</TableCell>
-                                                                <TableCell>Core-Surface score</TableCell>
-                                                            </TableRow>
-                                                        )}
-                                                        {interaction.cr_score !== null && (
-                                                            <TableRow>
-                                                                <TableCell>CR Score</TableCell>
-                                                                <TableCell align="right">{interaction.cr_score}</TableCell>
-                                                                <TableCell>Core-Rim score</TableCell>
-                                                            </TableRow>
-                                                        )}
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                        </Box>
-                                    )}
-
-                                    {/* Basic method info if no specific attributes */}
-                                    {!interaction.free_energy && !interaction.buried_area &&
-                                        !interaction.cs_score && !interaction.cr_score && (
-                                            <Typography variant="body2" paragraph color="text.secondary">
-                                                This interaction was detected using {interaction.method_name} based method.
-                                                {interaction.jaccard_percent && ` Jaccard similarity: ${interaction.jaccard_percent}%`}
-                                            </Typography>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                                        <Typography variant="h6" gutterBottom>
+                                            {interaction.method_names && interaction.method_names.length > 1
+                                                ? 'Detection Methods Details'
+                                                : `${interaction.method_name || (interaction.method_names && interaction.method_names[0])} Method Details`}
+                                        </Typography>
+                                        {interaction.method_names && interaction.method_names.length > 0 && (
+                                            <Box sx={{ display: 'flex', gap: 1 }}>
+                                                {interaction.method_names.map((method, index) => (
+                                                    getMethodRoute(method) && (
+                                                        <Button
+                                                            key={index}
+                                                            component={Link}
+                                                            to={getMethodRoute(method)}
+                                                            variant="outlined"
+                                                            size="small"
+                                                            startIcon={<OpenInNew />}
+                                                        >
+                                                            {method} Details
+                                                        </Button>
+                                                    )
+                                                ))}
+                                            </Box>
                                         )}
+                                        {!interaction.method_names && getMethodRoute(interaction.method_name) && (
+                                            <Button
+                                                component={Link}
+                                                to={getMethodRoute(interaction.method_name)}
+                                                variant="outlined"
+                                                size="small"
+                                                startIcon={<OpenInNew />}
+                                            >
+                                                Learn More
+                                            </Button>
+                                        )}
+                                    </Box>
+
+                                    {/* Method-specific attributes for all methods */}
+                                    {interaction.all_methods && interaction.all_methods.length > 0 ? (
+                                        interaction.all_methods.map((method, index) => (
+                                            <Box key={index} sx={{ mb: 3 }}>
+                                                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
+                                                    {method.method_name} Analysis
+                                                </Typography>
+
+                                                {/* PISA Attributes */}
+                                                {(method.free_energy !== null || method.buried_area !== null) && (
+                                                    <TableContainer component={Paper} variant="outlined" sx={{ mb: 2 }}>
+                                                        <Table size="small">
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell>Parameter</TableCell>
+                                                                    <TableCell align="right">Value</TableCell>
+                                                                    <TableCell>Description</TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {method.free_energy !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>Free Energy</TableCell>
+                                                                        <TableCell align="right">{method.free_energy} kcal/mol</TableCell>
+                                                                        <TableCell>Binding free energy</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                                {method.buried_area !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>Buried Area</TableCell>
+                                                                        <TableCell align="right">{method.buried_area} Ų</TableCell>
+                                                                        <TableCell>Surface area buried upon binding</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                                {method.hydrogen_bonds !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>Hydrogen Bonds</TableCell>
+                                                                        <TableCell align="right">{method.hydrogen_bonds}</TableCell>
+                                                                        <TableCell>Number of hydrogen bonds</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                                {method.salt_bridges !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>Salt Bridges</TableCell>
+                                                                        <TableCell align="right">{method.salt_bridges}</TableCell>
+                                                                        <TableCell>Number of salt bridges</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                )}
+
+                                                {/* EPPIC Attributes */}
+                                                {(method.cs_score !== null || method.cr_score !== null) && (
+                                                    <TableContainer component={Paper} variant="outlined" sx={{ mb: 2 }}>
+                                                        <Table size="small">
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell>Score Type</TableCell>
+                                                                    <TableCell align="right">Value</TableCell>
+                                                                    <TableCell>Interpretation</TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {method.cs_score !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>CS Score</TableCell>
+                                                                        <TableCell align="right">{method.cs_score}</TableCell>
+                                                                        <TableCell>Core-Surface score</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                                {method.cr_score !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>CR Score</TableCell>
+                                                                        <TableCell align="right">{method.cr_score}</TableCell>
+                                                                        <TableCell>Core-Rim score</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                )}
+
+                                                {/* Basic method info if no specific attributes */}
+                                                {!method.free_energy && !method.buried_area &&
+                                                    !method.cs_score && !method.cr_score && (
+                                                        <Typography variant="body2" paragraph color="text.secondary">
+                                                            This interaction was detected using {method.method_name} based method.
+                                                            {method.jaccard_percent && ` Jaccard similarity: ${method.jaccard_percent}%`}
+                                                        </Typography>
+                                                    )}
+                                            </Box>
+                                        ))
+                                    ) : (
+                                        /* Fallback for single method display */
+                                        <>
+                                            {/* PISA Attributes */}
+                                            {(interaction.free_energy !== null || interaction.buried_area !== null) && (
+                                                <Box sx={{ mb: 3 }}>
+                                                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
+                                                        PISA Analysis
+                                                    </Typography>
+                                                    <TableContainer component={Paper} variant="outlined">
+                                                        <Table size="small">
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell>Parameter</TableCell>
+                                                                    <TableCell align="right">Value</TableCell>
+                                                                    <TableCell>Description</TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {interaction.free_energy !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>Free Energy</TableCell>
+                                                                        <TableCell align="right">{interaction.free_energy} kcal/mol</TableCell>
+                                                                        <TableCell>Binding free energy</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                                {interaction.buried_area !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>Buried Area</TableCell>
+                                                                        <TableCell align="right">{interaction.buried_area} Ų</TableCell>
+                                                                        <TableCell>Surface area buried upon binding</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                                {interaction.hydrogen_bonds !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>Hydrogen Bonds</TableCell>
+                                                                        <TableCell align="right">{interaction.hydrogen_bonds}</TableCell>
+                                                                        <TableCell>Number of hydrogen bonds</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                                {interaction.salt_bridges !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>Salt Bridges</TableCell>
+                                                                        <TableCell align="right">{interaction.salt_bridges}</TableCell>
+                                                                        <TableCell>Number of salt bridges</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                </Box>
+                                            )}
+
+                                            {/* EPPIC Attributes */}
+                                            {(interaction.cs_score !== null || interaction.cr_score !== null) && (
+                                                <Box sx={{ mb: 3 }}>
+                                                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
+                                                        EPPIC Analysis
+                                                    </Typography>
+                                                    <TableContainer component={Paper} variant="outlined">
+                                                        <Table size="small">
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell>Score Type</TableCell>
+                                                                    <TableCell align="right">Value</TableCell>
+                                                                    <TableCell>Interpretation</TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {interaction.cs_score !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>CS Score</TableCell>
+                                                                        <TableCell align="right">{interaction.cs_score}</TableCell>
+                                                                        <TableCell>Core-Surface score</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                                {interaction.cr_score !== null && (
+                                                                    <TableRow>
+                                                                        <TableCell>CR Score</TableCell>
+                                                                        <TableCell align="right">{interaction.cr_score}</TableCell>
+                                                                        <TableCell>Core-Rim score</TableCell>
+                                                                    </TableRow>
+                                                                )}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                </Box>
+                                            )}
+
+                                            {/* Basic method info if no specific attributes */}
+                                            {!interaction.free_energy && !interaction.buried_area &&
+                                                !interaction.cs_score && !interaction.cr_score && (
+                                                    <Typography variant="body2" paragraph color="text.secondary">
+                                                        This interaction was detected using {interaction.method_name} based method.
+                                                        {interaction.jaccard_percent && ` Jaccard similarity: ${interaction.jaccard_percent}%`}
+                                                    </Typography>
+                                                )}
+                                        </>
+                                    )}
                                 </Box>
                             )}
 

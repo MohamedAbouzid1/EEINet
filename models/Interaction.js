@@ -118,7 +118,8 @@ class Interaction {
   }
 
   static async getById(interactionId) {
-    const query = `
+    // First get the basic interaction details
+    const basicQuery = `
       SELECT 
         ei.*,
         e1.ensembl_exon_id as exon1,
@@ -174,8 +175,56 @@ class Interaction {
       WHERE ei.eei_id = $1
     `;
 
-    const result = await db.query(query, [interactionId]);
-    return result.rows[0] || null;
+    const basicResult = await db.query(basicQuery, [interactionId]);
+    if (!basicResult.rows[0]) {
+      return null;
+    }
+
+    const interaction = basicResult.rows[0];
+
+    // Now get all methods for this interaction (same exon pair)
+    const methodsQuery = `
+      SELECT 
+        ei.eei_id,
+        em.method_name,
+        em.method_type,
+        ei.pdb_id,
+        ei.jaccard_percent,
+        eom.confidence,
+        epa.free_energy,
+        epa.buried_area,
+        epa.hydrogen_bonds,
+        epa.salt_bridges,
+        eea.cs_score,
+        eea.cr_score
+      FROM eei_interactions ei
+      JOIN exons e1 ON ei.exon1_id = e1.exon_id
+      JOIN exons e2 ON ei.exon2_id = e2.exon_id
+      JOIN proteins p1 ON ei.protein1_id = p1.protein_id
+      JOIN proteins p2 ON ei.protein2_id = p2.protein_id
+      JOIN eei_methods em ON ei.method_id = em.method_id
+      LEFT JOIN eei_orthology_mapping eom ON ei.eei_id = eom.eei_id
+      LEFT JOIN eei_pisa_attributes epa ON ei.eei_id = epa.eei_id
+      LEFT JOIN eei_eppic_attributes eea ON ei.eei_id = eea.eei_id
+      WHERE e1.ensembl_exon_id = $1 AND e2.ensembl_exon_id = $2
+        AND p1.uniprot_id = $3 AND p2.uniprot_id = $4
+      ORDER BY em.method_name
+    `;
+
+    const methodsResult = await db.query(methodsQuery, [
+      interaction.exon1,
+      interaction.exon2,
+      interaction.protein1,
+      interaction.protein2
+    ]);
+
+    // Add grouped information to the interaction
+    interaction.method_names = methodsResult.rows.map(row => row.method_name);
+    interaction.method_types = [...new Set(methodsResult.rows.map(row => row.method_type))];
+    interaction.pdb_ids = [...new Set(methodsResult.rows.map(row => row.pdb_id).filter(Boolean))];
+    interaction.all_methods = methodsResult.rows;
+
+    return interaction;
   }
 }
 

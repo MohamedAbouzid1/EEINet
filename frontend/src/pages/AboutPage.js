@@ -324,7 +324,7 @@ const AboutPage = () => {
                                     </Typography>
                                     <Paper sx={{ p: 3, backgroundColor: 'grey.50' }}>
                                         <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                                            EEINet: A comprehensive database resource for human exon-exon interactions. 2025. Available at:
+                                            EEINet: A comprehensive database resource for human exon-exon interactions. 2025. Available at: https://apps.cosy.bio/eeinet/
                                         </Typography>
                                     </Paper>
                                 </Grid>

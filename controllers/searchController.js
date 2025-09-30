@@ -50,12 +50,12 @@ const searchController = {
                 };
             }
 
-            // Use the new search function
-            const query = `SELECT * FROM search_eei_interactions($1, $2, $3, $4)`;
+            // Use the new grouped search function
+            const query = `SELECT * FROM search_eei_interactions_grouped($1, $2, $3, $4)`;
             const result = await db.query(query, [searchTerm, type, parseInt(limit), parseInt(offset)]);
 
             // Get total count of matching results (without limit/offset)
-            const countQuery = `SELECT COUNT(*) FROM search_eei_interactions($1, $2, NULL, NULL)`;
+            const countQuery = `SELECT COUNT(*) FROM search_eei_interactions_grouped($1, $2, NULL, NULL)`;
             const countResult = await db.query(countQuery, [searchTerm, type]);
             const totalCount = parseInt(countResult.rows[0].count);
 
@@ -123,13 +123,20 @@ const searchController = {
                 return res.json(response);
             }
 
+            // Transform the results to include method_name and method_type as single values for backward compatibility
+            const transformedResults = result.rows.map(row => ({
+                ...row,
+                method_name: row.method_names ? row.method_names.join(', ') : null,
+                method_type: row.method_types ? row.method_types[0] : null
+            }));
+
             const response = {
                 success: true,
                 data: {
                     search_term: searchTerm,
                     search_type: type,
                     search_method: 'function_based',
-                    results: result.rows,
+                    results: transformedResults,
                     pagination: {
                         limit: parseInt(limit),
                         offset: parseInt(offset),
