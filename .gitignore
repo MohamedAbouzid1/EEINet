@@ -13,3 +13,7 @@
 /**/backup_*.sql
 /**/*dump*.sql
 /**/*.dump
+
+.vscode/
+
+*.log
