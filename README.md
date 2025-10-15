@@ -297,7 +297,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 If you use EEINet in your research, please cite:
 
 ```
-
+EEINet: A comprehensive database resource for human exon-exon interactions. 2025. Available at: https://apps.cosy.bio/eeinet/
 ```
 
 ## Support
