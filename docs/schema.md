@@ -1,3 +1,4 @@
+```mermaid
 erDiagram
   ORGANISMS {
     int organism_id PK
@@ -93,3 +94,4 @@ erDiagram
   EEI_INTERACTIONS ||--|| PISA_ATTRIBUTES : "0..1"
   EEI_INTERACTIONS ||--|| EPPIC_ATTRIBUTES : "0..1"
   EEI_INTERACTIONS ||--|| ORTHOLOGY_SUPPORT : "0..1"
+```
